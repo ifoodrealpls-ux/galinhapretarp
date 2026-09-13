@@ -3,466 +3,1183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Admin Premium - GTA RP</title>
+    <title>Painel Admin Enterprise - GTA RP</title>
+    <!-- Fonte moderna similar à da imagem -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
+        /* ==========================================================================
+           1. VARIÁVEIS DE TEMA E CORES BÁSICAS
+           ========================================================================== */
         :root {
-            --bg-main: #0b1120; /* Fundo principal escuro */
-            --bg-panel: #1e293b; /* Fundo dos cartões */
-            --primary: #3b82f6; /* Azul Premium */
-            --primary-hover: #2563eb;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
+            /* Cores de Fundo (Inspirado na imagem) */
+            --bg-base: #0b0d14;
+            --bg-radial: radial-gradient(circle at 50% 0%, #1a2235 0%, #0b0d14 70%);
+            
+            /* Cores de Painéis (Glassmorphism) */
+            --panel-bg: rgba(20, 25, 35, 0.6);
+            --panel-bg-hover: rgba(30, 37, 50, 0.8);
+            --panel-border: rgba(255, 255, 255, 0.08);
+            --panel-border-focus: rgba(59, 130, 246, 0.5);
+            
+            /* Tipografia */
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            
+            /* Cores de Ação */
+            --color-primary: #3b82f6;
+            --color-primary-glow: rgba(59, 130, 246, 0.4);
+            --color-success: #10b981;
+            --color-danger: #ef4444;
+            --color-danger-glow: rgba(239, 68, 68, 0.2);
+            --color-warning: #f59e0b;
+            
+            /* Elementos UI */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+            --radius-pill: 9999px;
+            
+            /* Transições */
+            --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* ==========================================================================
+           2. RESET E TIPOGRAFIA GLOBAL
+           ========================================================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
         }
 
         body {
-            margin: 0;
-            padding: 20px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-main);
-            color: var(--text-main);
+            background-color: var(--bg-base);
+            background-image: var(--bg-radial);
+            background-attachment: fixed;
+            color: var(--text-primary);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            box-sizing: border-box;
+            overflow-x: hidden;
         }
 
-        /* Estilo Vidro/Premium para os painéis */
-        .glass-panel {
-            background-color: var(--bg-panel);
-            padding: 40px;
-            border-radius: 30px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), 0 0 20px rgba(59, 130, 246, 0.1);
+        /* Scrollbar Personalizada */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-base); }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+        /* ==========================================================================
+           3. SISTEMA DE TELAS (SPA) E ANIMAÇÕES
+           ========================================================================== */
+        .screen {
+            display: none;
             width: 100%;
-            max-width: 450px;
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeIn var(--transition-normal) forwards;
         }
 
-        .dashboard-panel {
-            max-width: 900px;
-            padding: 30px;
+        .screen.active {
+            display: flex;
         }
 
-        h2 {
-            text-align: center;
-            color: var(--primary);
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 0 0 var(--color-danger-glow); }
+            70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        /* ==========================================================================
+           4. COMPONENTES: TELA INICIAL (SIMULAÇÃO IP / BLOQUEIO)
+           ========================================================================== */
+        #auth-check-screen {
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .shield-icon-wrapper {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            padding: 20px;
+            border-radius: var(--radius-lg);
+            margin-bottom: 24px;
+            animation: pulse-glow 2s infinite;
+        }
+
+        .shield-icon-wrapper svg {
+            width: 48px;
+            height: 48px;
+            stroke: var(--color-danger);
+        }
+
+        .check-title {
+            font-size: 28px;
             font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .check-subtitle {
+            color: var(--text-secondary);
+            font-size: 16px;
             margin-bottom: 30px;
-            font-size: 26px;
         }
 
-        .input-group {
-            margin-bottom: 20px;
+        .ip-box {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--panel-border);
+            border-radius: var(--radius-md);
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
         }
 
-        label {
-            display: block;
-            margin-bottom: 8px;
+        .ip-box svg { stroke: var(--text-muted); width: 20px; }
+        .ip-box span { color: var(--text-secondary); font-size: 14px; }
+        .ip-box strong { color: var(--color-warning); font-family: monospace; font-size: 16px; }
+
+        .continue-btn {
+            background: transparent;
+            border: 1px solid var(--panel-border);
+            color: var(--text-secondary);
+            padding: 10px 20px;
+            border-radius: var(--radius-pill);
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+        .continue-btn:hover {
+            background: rgba(255,255,255,0.05);
+            color: var(--text-primary);
+        }
+
+        /* ==========================================================================
+           5. COMPONENTES: TELA DE LOGIN PREMIUM
+           ========================================================================== */
+        #login-screen {
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            height: 100vh;
+        }
+
+        .login-card {
+            background: var(--panel-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--panel-border);
+            border-radius: 24px;
+            padding: 48px 40px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Efeito de brilho sutil no topo do card */
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.5), transparent);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .login-header svg {
+            width: 54px;
+            height: 54px;
+            stroke: var(--color-primary);
+            margin-bottom: 16px;
+            filter: drop-shadow(0 0 10px var(--color-primary-glow));
+        }
+
+        .login-header h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .login-header p {
             color: var(--text-muted);
             font-size: 14px;
-            margin-left: 15px;
+            margin-top: 8px;
         }
 
-        /* Inputs e Selects Arredondados */
-        input, select {
-            width: 100%;
-            padding: 16px 25px;
-            border-radius: 50px;
-            border: 1px solid #334155;
-            background-color: #0f172a;
-            color: white;
-            box-sizing: border-box;
-            font-size: 15px;
-            outline: none;
-            transition: all 0.3s;
+        /* Alternador de Nível (Tabs de Login) */
+        .role-selector {
+            display: flex;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: var(--radius-pill);
+            padding: 4px;
+            margin-bottom: 30px;
+            border: 1px solid var(--panel-border);
         }
 
-        input:focus, select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
-        }
-
-        /* Botões Arredondados e com Sombra */
-        button {
-            width: 100%;
-            padding: 16px 25px;
-            border-radius: 50px;
-            border: none;
-            background: linear-gradient(135deg, var(--primary), #1d4ed8);
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
-            margin-top: 10px;
-        }
-
-        button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 25px rgba(59, 130, 246, 0.6);
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        .msg {
+        .role-btn {
+            flex: 1;
+            padding: 10px;
             text-align: center;
-            margin-top: 15px;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
             font-size: 14px;
-            min-height: 20px;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: var(--radius-pill);
+            transition: var(--transition-fast);
+        }
+
+        .role-btn.active {
+            background: var(--color-primary);
+            color: white;
+            box-shadow: 0 4px 12px var(--color-primary-glow);
+        }
+
+        /* Inputs Premium */
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            margin-left: 12px;
             font-weight: 500;
         }
 
-        .success { color: #10b981; }
-        .error { color: #ef4444; }
-
-        /* Grid do Dashboard */
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
         }
 
-        @media (max-width: 768px) {
-            .grid { grid-template-columns: 1fr; }
+        .input-wrapper svg {
+            position: absolute;
+            left: 16px;
+            width: 20px;
+            height: 20px;
+            stroke: var(--text-muted);
+            transition: var(--transition-fast);
         }
 
-        .card {
-            background-color: #0f172a;
-            padding: 25px;
-            border-radius: 25px;
-            border: 1px solid #334155;
-        }
-
-        .card h3 {
-            margin-top: 0;
-            color: var(--text-main);
-            font-size: 18px;
-            border-bottom: 2px solid var(--primary);
-            padding-bottom: 10px;
-            display: inline-block;
-        }
-
-        .btn-small {
-            padding: 12px 20px;
-            font-size: 14px;
-            margin-bottom: 12px;
-            border-radius: 50px;
-            background: #1e293b;
-            border: 1px solid #334155;
-            box-shadow: none;
-        }
-
-        .btn-small:hover {
-            background: var(--primary);
-            border-color: var(--primary);
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, #ef4444, #b91c1c);
-            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
-            margin-top: 30px;
-        }
-
-        .btn-danger:hover {
-            box-shadow: 0 12px 25px rgba(239, 68, 68, 0.6);
-        }
-
-        /* Tabela de Admins */
-        .table-container {
-            margin-top: 20px;
-            max-height: 200px;
-            overflow-y: auto;
-            border-radius: 15px;
-            background: #0b1120;
-            padding: 10px;
-        }
-
-        table {
+        .input-wrapper input {
             width: 100%;
-            border-collapse: collapse;
-            font-size: 13px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--panel-border);
+            border-radius: var(--radius-pill);
+            padding: 16px 16px 16px 48px;
+            color: var(--text-primary);
+            font-size: 15px;
+            outline: none;
+            transition: var(--transition-fast);
         }
 
-        th, td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #1e293b;
+        .input-wrapper input:focus {
+            border-color: var(--color-primary);
+            background: rgba(0, 0, 0, 0.4);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
         }
 
-        th {
-            color: var(--text-muted);
+        .input-wrapper input:focus + svg,
+        .input-wrapper input:not(:placeholder-shown) + svg {
+            stroke: var(--color-primary);
+        }
+
+        /* Botão de Submit */
+        .btn-submit {
+            width: 100%;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            border: none;
+            border-radius: var(--radius-pill);
+            padding: 16px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: var(--transition-fast);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 16px rgba(37, 99, 235, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(37, 99, 235, 0.4);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        /* Loading do Botão */
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+        }
+        .btn-submit.loading .btn-text { display: none; }
+        .btn-submit.loading .spinner { display: block; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ==========================================================================
+           6. COMPONENTES: DASHBOARD COMPLETO (SISTEMA INTERNO)
+           ========================================================================== */
+        #dashboard-screen {
+            width: 100%;
+            height: 100vh;
+            display: none; /* Alterado via JS para flex */
+        }
+        
+        #dashboard-screen.active {
+            display: flex;
+        }
+
+        /* Menu Lateral (Sidebar) */
+        .sidebar {
+            width: 280px;
+            background: rgba(11, 13, 20, 0.8);
+            border-right: 1px solid var(--panel-border);
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(10px);
+        }
+
+        .sidebar-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--panel-border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar-header svg {
+            width: 32px; height: 32px;
+            stroke: var(--color-primary);
+        }
+
+        .sidebar-header h1 {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .user-profile {
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border-bottom: 1px solid var(--panel-border);
+        }
+
+        .avatar {
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--color-primary), #8b5cf6);
+            display: flex; justify-content: center; align-items: center;
+            font-size: 20px; font-weight: bold; color: white;
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+        }
+
+        .user-info h3 { font-size: 15px; color: var(--text-primary); }
+        .user-info p { font-size: 12px; color: var(--color-primary); font-weight: 500; margin-top: 4px; }
+
+        .nav-menu {
+            padding: 20px 12px;
+            flex: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            margin-bottom: 8px;
+            transition: var(--transition-fast);
+            cursor: pointer;
+        }
+
+        .nav-item svg { width: 20px; height: 20px; stroke: currentColor; }
+        
+        .nav-item:hover, .nav-item.active {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--color-primary);
+        }
+
+        .sidebar-footer {
+            padding: 24px;
+            border-top: 1px solid var(--panel-border);
+        }
+        
+        .btn-logout {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px;
+            background: transparent;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: var(--color-danger);
+            border-radius: var(--radius-pill);
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+        .btn-logout:hover {
+            background: var(--color-danger);
+            color: white;
+        }
+
+        /* Área de Conteúdo Principal */
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .page-title {
+            font-size: 28px;
             font-weight: 600;
         }
 
-        td {
-            color: #cbd5e1;
+        /* Grid de Cards Estatísticos */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
         }
 
-        .hash-text {
-            font-family: monospace;
-            color: #64748b;
-            font-size: 11px;
+        .stat-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            padding: 24px;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: var(--transition-fast);
         }
+        .stat-card:hover { border-color: var(--panel-border-focus); transform: translateY(-3px); }
 
-        /* Animação de Carregamento (Spinner) */
-        .loader {
-            display: none;
-            border: 3px solid rgba(255,255,255,0.1);
-            border-top: 3px solid white;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
+        .stat-icon {
+            width: 56px; height: 56px;
+            border-radius: 16px;
+            display: flex; justify-content: center; align-items: center;
         }
-
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .stat-icon.blue { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+        .stat-icon.green { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+        .stat-icon.purple { background: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
         
-        .btn-content { display: block; }
-        .loading .btn-content { display: none; }
-        .loading .loader { display: block; }
+        .stat-icon svg { width: 28px; height: 28px; stroke: currentColor; }
+
+        .stat-info h4 { color: var(--text-muted); font-size: 13px; font-weight: 500; margin-bottom: 8px; }
+        .stat-info .number { font-size: 28px; font-weight: 700; color: var(--text-primary); }
+
+        /* Seções do Dashboard (Abas) */
+        .dashboard-section { display: none; animation: fadeIn var(--transition-normal); }
+        .dashboard-section.active { display: block; }
+
+        /* Painéis de Conteúdo */
+        .content-panel {
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            margin-bottom: 24px;
+        }
+        
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--panel-border);
+        }
+        .panel-header h3 { font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 10px;}
+
+        /* Botões de Ação Rápida */
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+        }
+        .btn-action {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--panel-border);
+            padding: 16px;
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: var(--transition-fast);
+        }
+        .btn-action:hover {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: var(--color-primary);
+        }
+        .btn-action svg { width: 18px; height: 18px; stroke: var(--color-primary); }
+
+        /* Tabela Premium e Formulários */
+        .form-row {
+            display: flex; gap: 20px; margin-bottom: 20px;
+        }
+        .form-row .form-group { flex: 1; margin-bottom: 0; }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: var(--radius-pill);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+        .btn-primary:hover { background: #2563eb; }
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        th {
+            padding: 16px;
+            color: var(--text-muted);
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--panel-border);
+        }
+        td {
+            padding: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        tr:hover td { background: rgba(255,255,255,0.02); }
+        
+        .badge {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--color-success);
+            padding: 4px 10px;
+            border-radius: var(--radius-pill);
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .hash-preview {
+            font-family: monospace;
+            background: rgba(0,0,0,0.3);
+            padding: 4px 8px;
+            border-radius: 4px;
+            color: #94a3b8;
+            font-size: 12px;
+        }
+
+        .btn-delete {
+            background: transparent;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: var(--color-danger);
+            padding: 6px 12px;
+            border-radius: var(--radius-pill);
+            cursor: pointer;
+            font-size: 12px;
+            transition: 0.2s;
+        }
+        .btn-delete:hover { background: var(--color-danger); color: white; }
+
+        /* ==========================================================================
+           7. SISTEMA DE NOTIFICAÇÕES (TOAST)
+           ========================================================================== */
+        #toast-container {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .toast {
+            background: var(--panel-bg);
+            backdrop-filter: blur(10px);
+            border-left: 4px solid var(--color-primary);
+            padding: 16px 24px;
+            border-radius: var(--radius-md);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 300px;
+            animation: slideInRight 0.3s ease forwards;
+        }
+        .toast.success { border-color: var(--color-success); }
+        .toast.error { border-color: var(--color-danger); }
+        .toast.warning { border-color: var(--color-warning); }
+
+        .toast-icon svg { width: 24px; height: 24px; }
+        .toast.success svg { stroke: var(--color-success); }
+        .toast.error svg { stroke: var(--color-danger); }
+        
+        .toast-content h4 { font-size: 14px; margin-bottom: 4px; color: white; }
+        .toast-content p { font-size: 13px; color: var(--text-secondary); }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; transform: translateY(-10px); }
+        }
+
     </style>
 </head>
 <body>
 
-    <!-- TELA DE LOGIN -->
-    <div class="glass-panel" id="login-container">
-        <h2>Painel Admin</h2>
+    <!-- CONTAINER DE TOASTS (Notificações) -->
+    <div id="toast-container"></div>
 
-        <div class="input-group">
-            <label for="login-type">Nível de Acesso</label>
-            <select id="login-type">
-                <option value="dono">Dono (Proprietário)</option>
-                <option value="admin">Administrador</option>
-            </select>
+    <!-- TELA 1: BLOQUEIO / IP CHECK (Inspirado na imagem) -->
+    <div id="auth-check-screen" class="screen active">
+        <div class="shield-icon-wrapper">
+            <!-- SVG Escudo Restrito -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+        </div>
+        <h1 class="check-title">Acesso Restrito</h1>
+        <p class="check-subtitle">Verificando autorização do terminal e endereço IP...</p>
+        
+        <div class="ip-box">
+            <!-- SVG Wifi -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
+                <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
+                <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+                <line x1="12" y1="20" x2="12.01" y2="20"></line>
+            </svg>
+            <span>IP detectado:</span>
+            <strong>192.168.***.***</strong>
         </div>
 
-        <div class="input-group">
-            <label for="username">Usuário</label>
-            <input type="text" id="username" placeholder="Digite seu login..." autocomplete="off">
-        </div>
-
-        <div class="input-group">
-            <label for="password">Senha Autenticada</label>
-            <input type="password" id="password" placeholder="••••••••••••">
-        </div>
-
-        <button id="login-btn" onclick="realizarLogin()">
-            <span class="btn-content">Acessar Sistema</span>
-            <div class="loader"></div>
+        <button class="continue-btn" onclick="prosseguirParaLogin()">
+            Solicitar Acesso Manual
         </button>
-        <div id="msg-box" class="msg"></div>
     </div>
 
-    <!-- TELA DO PAINEL (DASHBOARD) -->
-    <div class="glass-panel dashboard-panel hidden" id="dashboard-container">
-        <h2>Central de Comando - <span id="user-role-display" style="color: white;"></span></h2>
-        <p style="text-align: center; color: var(--text-muted); margin-bottom: 30px;">
-            Sessão ativa: <strong id="logged-user" style="color: var(--primary);"></strong>
-        </p>
-
-        <div class="grid">
-            <!-- Comandos Básicos (Visível para todos) -->
-            <div class="card">
-                <h3>Ações Rápidas</h3>
-                <button class="btn-small" onclick="executarComando('/reviverall')">Reviver Todos</button>
-                <button class="btn-small" onclick="executarComando('/dvall')">Limpar Veículos (DV)</button>
-                <button class="btn-small" onclick="executarComando('/anuncio')">Enviar Anúncio</button>
-                <button class="btn-small" onclick="executarComando('/clima')">Mudar Clima</button>
+    <!-- TELA 2: LOGIN PREMIUM -->
+    <div id="login-screen" class="screen">
+        <div class="login-card">
+            <div class="login-header">
+                <!-- SVG Chave/Lock -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                <h2>Terminal Administrativo</h2>
+                <p>Identifique-se para acessar o painel de controle</p>
             </div>
 
-            <!-- Área de Criação de Admins (Só para o Dono) -->
-            <div class="card hidden" id="owner-section">
-                <h3>Banco de Dados: Admins</h3>
-                
-                <div class="input-group" style="margin-top: 15px;">
-                    <input type="text" id="new-admin-user" placeholder="Novo Login Admin">
-                </div>
-                <div class="input-group">
-                    <input type="password" id="new-admin-pass" placeholder="Nova Senha Forte">
-                </div>
-                <button onclick="criarAdmin()" style="padding: 12px; font-size: 14px;">Registrar Admin</button>
-                <div id="admin-msg-box" class="msg" style="margin-top: 5px;"></div>
+            <!-- Tabs de Cargo -->
+            <div class="role-selector">
+                <button class="role-btn active" id="tab-dono" onclick="mudarAcesso('dono')">Proprietário</button>
+                <button class="role-btn" id="tab-admin" onclick="mudarAcesso('admin')">Administrador</button>
+            </div>
 
-                <!-- Lista de Admins Salvos -->
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Usuário</th>
-                                <th>Hash (Criptografia)</th>
-                            </tr>
-                        </thead>
-                        <tbody id="admins-list">
-                            <!-- Preenchido via JavaScript -->
-                        </tbody>
-                    </table>
+            <!-- Formulário -->
+            <div class="form-group">
+                <label>Credencial de Usuário</label>
+                <div class="input-wrapper">
+                    <!-- SVG User -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <input type="text" id="username" placeholder="Digite seu usuário..." autocomplete="off">
                 </div>
             </div>
+
+            <div class="form-group">
+                <label>Chave de Segurança</label>
+                <div class="input-wrapper">
+                    <!-- SVG Password -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path>
+                    </svg>
+                    <input type="password" id="password" placeholder="••••••••••••••">
+                </div>
+            </div>
+
+            <button class="btn-submit" id="btn-login" onclick="autenticar()">
+                <span class="btn-text">Autenticar Conexão</span>
+                <div class="spinner"></div>
+            </button>
         </div>
-
-        <button class="btn-danger" onclick="sair()">Encerrar Sessão</button>
     </div>
 
-    <script>
-        // --- SISTEMA DE CRIPTOGRAFIA PESADA ---
-        const SALT = "GTA_RP_SALT_SECRET_2023_SECURITY"; // Dificulta quebra de senhas
+    <!-- TELA 3: DASHBOARD COMPLETO -->
+    <div id="dashboard-screen" class="screen">
+        <!-- Sidebar Esquerda -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                    <polyline points="2 17 12 22 22 17"></polyline>
+                    <polyline points="2 12 12 17 22 12"></polyline>
+                </svg>
+                <h1>Admin RP</h1>
+            </div>
+            
+            <div class="user-profile">
+                <div class="avatar" id="avatar-letter">H</div>
+                <div class="user-info">
+                    <h3 id="display-name">HillZera</h3>
+                    <p id="display-role">Proprietário</p>
+                </div>
+            </div>
 
-        async function hashPassword(senha) {
+            <nav class="nav-menu">
+                <a class="nav-item active" onclick="navegarDash('overview', this)">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    Visão Geral
+                </a>
+                
+                <a class="nav-item" id="nav-gerenciar-admins" onclick="navegarDash('gerenciar', this)" style="display: none;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    Gerenciar Equipe
+                </a>
+                
+                <a class="nav-item" onclick="navegarDash('logs', this)">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+                    Logs do Servidor
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="btn-logout" onclick="fazerLogout()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    Desconectar
+                </button>
+            </div>
+        </aside>
+
+        <!-- Conteúdo Principal -->
+        <main class="main-content">
+            
+            <!-- SECÃO 1: VISÃO GERAL -->
+            <div id="sec-overview" class="dashboard-section active">
+                <div class="top-bar">
+                    <h2 class="page-title">Centro de Operações</h2>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Jogadores Online</h4>
+                            <div class="number">128</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Uptime Servidor</h4>
+                            <div class="number">48h 12m</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon purple">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10.08 10.08 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                        </div>
+                        <div class="stat-info">
+                            <h4>Admins Ativos</h4>
+                            <div class="number" id="count-admins">1</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-panel">
+                    <div class="panel-header">
+                        <h3>Comandos Rápidos do Servidor</h3>
+                    </div>
+                    <div class="action-grid">
+                        <button class="btn-action" onclick="mockComando('Limpar Veículos (/dvall)')">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 3h18v18H3zM8 12h8M12 8v8"/></svg>
+                            Limpar Veículos (DV)
+                        </button>
+                        <button class="btn-action" onclick="mockComando('Reviver Todos (/reviveall)')">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12l5.66-5.66 1-1"></path><path d="M2 12l5.66 5.66 1-1"></path><path d="M12 2l10 10-1 1"></path></svg>
+                            Reviver Global
+                        </button>
+                        <button class="btn-action" onclick="mockComando('Anúncio Global (/anuncio)')">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                            Enviar Anúncio
+                        </button>
+                        <button class="btn-action" onclick="mockComando('Mudar Clima (/clima)')">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                            Alternar Clima
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECÃO 2: GERENCIAR ADMINS (Apenas Dono) -->
+            <div id="sec-gerenciar" class="dashboard-section">
+                <div class="top-bar">
+                    <h2 class="page-title">Gestão de Equipe</h2>
+                </div>
+
+                <div class="content-panel">
+                    <div class="panel-header">
+                        <h3>Criar Nova Credencial</h3>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Usuário Administrativo</label>
+                            <div class="input-wrapper">
+                                <input type="text" id="new-admin-user" placeholder="Ex: ModZezinho">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Senha de Acesso (Será Criptografada)</label>
+                            <div class="input-wrapper">
+                                <input type="password" id="new-admin-pass" placeholder="Defina uma senha forte">
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn-primary" onclick="criarAdministrador()">+ Registrar no Banco de Dados</button>
+                </div>
+
+                <div class="content-panel">
+                    <div class="panel-header">
+                        <h3>Administradores Registrados (Banco Local)</h3>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Status</th>
+                                    <th>Usuário</th>
+                                    <th>Hash SHA-256 (Segurança)</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabela-admins-body">
+                                <!-- Preenchido via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECÃO 3: LOGS -->
+            <div id="sec-logs" class="dashboard-section">
+                <div class="top-bar">
+                    <h2 class="page-title">Logs do Sistema</h2>
+                </div>
+                <div class="content-panel">
+                    <p style="color: var(--text-muted);">Módulo de logs será conectado ao servidor FiveM em breve...</p>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- ==========================================================================
+         JAVASCRIPT - LÓGICA CORE, CRIPTOGRAFIA E ESTADOS
+         ========================================================================== -->
+    <script>
+        // --- 1. CONFIGURAÇÕES GERAIS E SEGURANÇA ---
+        const MASTER_USER = "HillZera";
+        const MASTER_PASS_RAW = "01051994Senna@Lp12";
+        const SALT_KEY = "GTA_RP_ENTERPRISE_SALT_9912"; // Camada extra de segurança
+        let masterHash = "";
+        
+        let cargoAtual = 'dono'; // Controle das tabs de login
+
+        // --- 2. INICIALIZAÇÃO ASSÍNCRONA ---
+        async function bootApp() {
+            // Gera o hash do Dono em memória ao abrir a página
+            masterHash = await gerarHashSHA256(MASTER_PASS_RAW);
+            
+            // Garante que existe um banco local
+            if (!localStorage.getItem('rp_db_admins')) {
+                localStorage.setItem('rp_db_admins', JSON.stringify({}));
+            }
+        }
+        bootApp();
+
+        // --- 3. MOTOR DE CRIPTOGRAFIA (Web Crypto API) ---
+        async function gerarHashSHA256(textoPlano) {
             const encoder = new TextEncoder();
-            const data = encoder.encode(senha + SALT);
+            const data = encoder.encode(textoPlano + SALT_KEY);
             const hashBuffer = await crypto.subtle.digest('SHA-256', data);
             const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            return hashHex;
         }
 
-        // --- CREDENCIAIS DO DONO ---
-        const DONO_USER = "HillZera";
-        const DONO_PASS_RAW = "01051994Senna@Lp12";
-        let DONO_HASH = "";
-
-        async function inicializarSistema() {
-            DONO_HASH = await hashPassword(DONO_PASS_RAW);
-            if (!localStorage.getItem('banco_admins_rp')) {
-                localStorage.setItem('banco_admins_rp', JSON.stringify({}));
+        // --- 4. SISTEMA DE TOASTS (NOTIFICAÇÕES FLUTUANTES) ---
+        function showToast(title, message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            let iconSvg = '';
+            if (type === 'success') {
+                iconSvg = `<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10.08 10.08 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`;
+            } else if (type === 'error') {
+                iconSvg = `<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>`;
             }
-            atualizarTabelaAdmins();
-        }
-        inicializarSistema();
 
-        // --- FUNÇÃO DE LOGIN COM SIMULAÇÃO DE BANCO DE DADOS ---
-        async function realizarLogin() {
-            const btn = document.getElementById('login-btn');
-            const msgBox = document.getElementById('msg-box');
-            const tipo = document.getElementById('login-type').value;
+            toast.innerHTML = `
+                <div class="toast-icon">${iconSvg}</div>
+                <div class="toast-content">
+                    <h4>${title}</h4>
+                    <p>${message}</p>
+                </div>
+            `;
+            container.appendChild(toast);
+
+            // Remove o toast após 4 segundos
+            setTimeout(() => {
+                toast.style.animation = 'fadeOut 0.3s ease forwards';
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+
+        // --- 5. NAVEGAÇÃO ENTRE TELAS SPA ---
+        function switchScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        function prosseguirParaLogin() {
+            // Efeito visual simulando carregamento antes de ir pro login
+            document.querySelector('.continue-btn').innerText = "Autorizando...";
+            setTimeout(() => {
+                switchScreen('login-screen');
+            }, 600);
+        }
+
+        // --- 6. LÓGICA DA TELA DE LOGIN ---
+        function mudarAcesso(tipo) {
+            cargoAtual = tipo;
+            document.getElementById('tab-dono').classList.remove('active');
+            document.getElementById('tab-admin').classList.remove('active');
+            document.getElementById(`tab-${tipo}`).classList.add('active');
+        }
+
+        async function autenticar() {
+            const btn = document.getElementById('btn-login');
             const user = document.getElementById('username').value.trim();
             const pass = document.getElementById('password').value;
 
             if (!user || !pass) {
-                mostrarMensagem(msgBox, "Preencha todos os campos corretamente.", "error");
+                showToast("Erro de Validação", "Preencha suas credenciais completas.", "error");
                 return;
             }
 
-            // Efeito visual de carregamento "pesado"
             btn.classList.add('loading');
-            msgBox.innerText = "";
 
-            // Simula o tempo de requisição a um banco de dados
+            // Simula delay de rede/banco de dados
             setTimeout(async () => {
-                const passCriptografada = await hashPassword(pass);
+                const inputHash = await gerarHashSHA256(pass);
+                let autorizado = false;
+                let userRoleDisplay = "";
 
-                if (tipo === 'dono') {
-                    if (user === DONO_USER && passCriptografada === DONO_HASH) {
-                        abrirDashboard('Dono', user);
-                    } else {
-                        mostrarMensagem(msgBox, "Acesso Negado: Credenciais inválidas.", "error");
+                if (cargoAtual === 'dono') {
+                    if (user === MASTER_USER && inputHash === masterHash) {
+                        autorizado = true;
+                        userRoleDisplay = "Proprietário";
+                        // Mostra aba de gerenciar
+                        document.getElementById('nav-gerenciar-admins').style.display = 'flex';
                     }
-                } else if (tipo === 'admin') {
-                    const admins = JSON.parse(localStorage.getItem('banco_admins_rp'));
-                    if (admins[user] && admins[user] === passCriptografada) {
-                        abrirDashboard('Administrador', user);
-                    } else {
-                        mostrarMensagem(msgBox, "Acesso Negado: Admin não encontrado ou senha errada.", "error");
+                } else if (cargoAtual === 'admin') {
+                    const bancoAdmins = JSON.parse(localStorage.getItem('rp_db_admins'));
+                    if (bancoAdmins[user] && bancoAdmins[user] === inputHash) {
+                        autorizado = true;
+                        userRoleDisplay = "Administrador";
+                        // Esconde aba de gerenciar
+                        document.getElementById('nav-gerenciar-admins').style.display = 'none';
                     }
                 }
-                
+
                 btn.classList.remove('loading');
-            }, 800); // 800ms de delay simulado
+
+                if (autorizado) {
+                    showToast("Conexão Estabelecida", "Bem-vindo ao terminal administrativo.", "success");
+                    prepararDashboard(user, userRoleDisplay);
+                    switchScreen('dashboard-screen');
+                } else {
+                    showToast("Acesso Negado", "Credenciais inválidas ou nível incorreto.", "error");
+                    document.getElementById('password').value = "";
+                }
+            }, 1200);
         }
 
-        function abrirDashboard(cargo, usuario) {
-            document.getElementById('login-container').classList.add('hidden');
-            document.getElementById('dashboard-container').classList.remove('hidden');
-            document.getElementById('user-role-display').innerText = cargo;
-            document.getElementById('logged-user').innerText = usuario;
-
-            if (cargo === 'Dono') {
-                document.getElementById('owner-section').classList.remove('hidden');
-                atualizarTabelaAdmins();
-            } else {
-                document.getElementById('owner-section').classList.add('hidden');
-            }
-        }
-
-        // --- FUNÇÃO DE CRIAR ADMINS ---
-        async function criarAdmin() {
-            const novoUser = document.getElementById('new-admin-user').value.trim();
-            const novaPass = document.getElementById('new-admin-pass').value;
-            const msgBox = document.getElementById('admin-msg-box');
-
-            if (!novoUser || !novaPass) {
-                mostrarMensagem(msgBox, "Preencha usuário e senha!", "error");
-                return;
-            }
-
-            if (novoUser.toLowerCase() === DONO_USER.toLowerCase()) {
-                mostrarMensagem(msgBox, "Nome reservado ao sistema.", "error");
-                return;
-            }
-
-            const admins = JSON.parse(localStorage.getItem('banco_admins_rp'));
-            if (admins[novoUser]) {
-                mostrarMensagem(msgBox, "Este login já existe no banco.", "error");
-                return;
-            }
-
-            // Salva criptografado
-            const hash = await hashPassword(novaPass);
-            admins[novoUser] = hash;
-            localStorage.setItem('banco_admins_rp', JSON.stringify(admins));
-
-            mostrarMensagem(msgBox, "Administrador registrado com sucesso!", "success");
-            document.getElementById('new-admin-user').value = "";
-            document.getElementById('new-admin-pass').value = "";
+        // --- 7. LÓGICA DO DASHBOARD ---
+        function prepararDashboard(nome, cargo) {
+            document.getElementById('display-name').innerText = nome;
+            document.getElementById('display-role').innerText = cargo;
+            document.getElementById('avatar-letter').innerText = nome.charAt(0).toUpperCase();
             
+            // Navega para a aba inicial
+            document.querySelector('.nav-item').click();
             atualizarTabelaAdmins();
         }
 
-        // --- ATUALIZA A TABELA VISUAL ---
-        function atualizarTabelaAdmins() {
-            const tbody = document.getElementById('admins-list');
-            const admins = JSON.parse(localStorage.getItem('banco_admins_rp')) || {};
+        function navegarDash(section, element) {
+            // Atualiza menu
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
             
-            tbody.innerHTML = "";
-            
-            const nomes = Object.keys(admins);
-            if (nomes.length === 0) {
-                tbody.innerHTML = "<tr><td colspan='2' style='text-align:center;'>Nenhum admin registrado ainda.</td></tr>";
+            // Atualiza sessões
+            document.querySelectorAll('.dashboard-section').forEach(el => el.classList.remove('active'));
+            document.getElementById(`sec-${section}`).classList.add('active');
+        }
+
+        function fazerLogout() {
+            document.getElementById('username').value = "";
+            document.getElementById('password').value = "";
+            switchScreen('login-screen');
+            showToast("Desconectado", "Sessão encerrada com segurança.", "success");
+        }
+
+        function mockComando(nome) {
+            showToast("Comando Enviado", `Comando ${nome} executado no servidor FiveM.`, "success");
+        }
+
+        // --- 8. GESTÃO DE ADMINISTRADORES (BANCO LOCAL) ---
+        async function criarAdministrador() {
+            const userStr = document.getElementById('new-admin-user').value.trim();
+            const passStr = document.getElementById('new-admin-pass').value;
+
+            if (!userStr || passStr.length < 3) {
+                showToast("Falha", "Preencha usuário e forneça uma senha válida.", "error");
                 return;
             }
 
-            nomes.forEach(nome => {
+            if (userStr.toLowerCase() === MASTER_USER.toLowerCase()) {
+                showToast("Aviso de Segurança", "Este nome de usuário é reservado ao sistema.", "error");
+                return;
+            }
+
+            let db = JSON.parse(localStorage.getItem('rp_db_admins'));
+            
+            if (db[userStr]) {
+                showToast("Conflito", "Já existe um administrador com este login.", "error");
+                return;
+            }
+
+            const novoHash = await gerarHashSHA256(passStr);
+            db[userStr] = novoHash;
+            localStorage.setItem('rp_db_admins', JSON.stringify(db));
+
+            showToast("Sucesso", "Administrador registrado e criptografado com sucesso.", "success");
+            
+            document.getElementById('new-admin-user').value = "";
+            document.getElementById('new-admin-pass').value = "";
+            atualizarTabelaAdmins();
+        }
+
+        function removerAdmin(nomeAdmin) {
+            if (confirm(`Tem certeza que deseja revogar o acesso de ${nomeAdmin}?`)) {
+                let db = JSON.parse(localStorage.getItem('rp_db_admins'));
+                delete db[nomeAdmin];
+                localStorage.setItem('rp_db_admins', JSON.stringify(db));
+                showToast("Revogado", `Acesso de ${nomeAdmin} foi removido.`, "success");
+                atualizarTabelaAdmins();
+            }
+        }
+
+        function atualizarTabelaAdmins() {
+            const tbody = document.getElementById('tabela-admins-body');
+            const db = JSON.parse(localStorage.getItem('rp_db_admins')) || {};
+            const admins = Object.keys(db);
+            
+            document.getElementById('count-admins').innerText = admins.length + 1; // +1 do dono
+
+            tbody.innerHTML = "";
+
+            if (admins.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">Nenhum administrador registrado no banco de dados.</td></tr>`;
+                return;
+            }
+
+            admins.forEach(nome => {
                 const tr = document.createElement('tr');
-                const hashReduzido = admins[nome].substring(0, 15) + "..."; // Mostra só um pedaço do hash
-                
+                const hashCompleto = db[nome];
+                const hashCurto = hashCompleto.substring(0, 12) + "..." + hashCompleto.substring(hashCompleto.length - 4);
+
                 tr.innerHTML = `
-                    <td><strong>${nome}</strong></td>
-                    <td class="hash-text">${hashReduzido}</td>
+                    <td><span class="badge">Ativo</span></td>
+                    <td style="color: var(--text-primary); font-weight: 500;">${nome}</td>
+                    <td><span class="hash-preview" title="${hashCompleto}">${hashCurto}</span></td>
+                    <td>
+                        <button class="btn-delete" onclick="removerAdmin('${nome}')">Remover Acesso</button>
+                    </td>
                 `;
                 tbody.appendChild(tr);
             });
-        }
-
-        function executarComando(cmd) {
-            alert(`[SISTEMA] Comando ${cmd} executado no servidor.`);
-        }
-
-        function sair() {
-            document.getElementById('dashboard-container').classList.add('hidden');
-            document.getElementById('login-container').classList.remove('hidden');
-            document.getElementById('username').value = "";
-            document.getElementById('password').value = "";
-            document.getElementById('msg-box').innerText = "";
-        }
-
-        function mostrarMensagem(elemento, texto, classe) {
-            elemento.innerText = texto;
-            elemento.className = "msg " + classe;
-            setTimeout(() => { elemento.innerText = ""; }, 3500);
         }
     </script>
 </body>
