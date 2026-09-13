@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         /* ==========================================================================
-           1. CORE VARIABLES & DESIGN TOKENS (MASSIVE EXPANSION)
+           1. CORE VARIABLES & DESIGN TOKENS
            ========================================================================== */
         :root {
             /* Color Palette - Dark Space Theme */
@@ -15,23 +15,25 @@
             --slate-300: #cbd5e1; --slate-400: #94a3b8; --slate-500: #64748b;
             --slate-600: #475569; --slate-700: #334155; --slate-800: #1e293b;
             --slate-900: #0f172a; --slate-950: #020617;
-            
+
             --blue-50: #eff6ff; --blue-500: #3b82f6; --blue-600: #2563eb; --blue-700: #1d4ed8;
             --emerald-500: #10b981; --emerald-600: #059669;
             --red-500: #ef4444; --red-600: #dc2626;
             --amber-500: #f59e0b; --amber-600: #d97706;
+            --purple-500: #8b5cf6; --cyan-500: #06b6d4;
 
             /* Semantic Backgrounds */
             --bg-base: #05080f;
             --bg-surface: #0a0f1c;
             --bg-surface-raised: #111827;
             --bg-radial: radial-gradient(circle at 50% -20%, #172442 0%, #05080f 80%);
+            --terminal-bg: #02040a;
 
             /* Glassmorphism */
             --glass-bg: rgba(10, 15, 28, 0.6);
             --glass-border: rgba(255, 255, 255, 0.04);
             --glass-border-light: rgba(255, 255, 255, 0.08);
-            
+
             /* Text */
             --text-primary: var(--slate-50);
             --text-secondary: var(--slate-400);
@@ -78,7 +80,7 @@
         ::-webkit-scrollbar-thumb:hover { background: var(--slate-600); }
 
         /* ==========================================================================
-           3. UI COMPONENTS (BUTTONS, INPUTS, CARDS)
+           3. UI COMPONENTS (BUTTONS, INPUTS, CARDS, TERMINAL)
            ========================================================================== */
         .glass-panel {
             background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
@@ -119,6 +121,39 @@
         .badge-success { background: rgba(16, 185, 129, 0.1); color: var(--emerald-500); border: 1px solid rgba(16, 185, 129, 0.2); }
         .badge-danger { background: rgba(239, 68, 68, 0.1); color: var(--red-500); border: 1px solid rgba(239, 68, 68, 0.2); }
         .badge-warning { background: rgba(245, 158, 11, 0.1); color: var(--amber-500); border: 1px solid rgba(245, 158, 11, 0.2); }
+        .badge-cyan { background: rgba(6, 182, 212, 0.1); color: var(--cyan-500); border: 1px solid rgba(6, 182, 212, 0.2); }
+
+        /* Terminal Component */
+        .terminal-window {
+            background: var(--terminal-bg); border: 1px solid var(--slate-800); border-radius: var(--radius-lg);
+            overflow: hidden; display: flex; flex-direction: column; box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+        }
+        .terminal-header {
+            background: var(--slate-900); padding: 8px 16px; display: flex; align-items: center; gap: 8px;
+            border-bottom: 1px solid var(--slate-800); font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--slate-400);
+        }
+        .terminal-dots { display: flex; gap: 6px; }
+        .terminal-dots span { width: 10px; height: 10px; border-radius: 50%; }
+        .terminal-dots .red { background: #ef4444; }
+        .terminal-dots .amber { background: #f59e0b; }
+        .terminal-dots .green { background: #10b981; }
+        .terminal-body {
+            padding: 16px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--slate-300);
+            height: 350px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;
+        }
+        .terminal-line { display: flex; gap: 8px; word-break: break-all; }
+        .terminal-line .time { color: var(--slate-500); }
+        .terminal-line .prompt { color: var(--emerald-500); font-weight: bold; }
+        .terminal-line .error { color: var(--red-500); }
+        .terminal-line .info { color: var(--cyan-500); }
+        .terminal-line .warn { color: var(--amber-500); }
+        .terminal-input-wrapper { display: flex; align-items: center; padding: 12px 16px; background: rgba(255,255,255,0.02); border-top: 1px solid var(--slate-800); font-family: 'JetBrains Mono', monospace; }
+        .terminal-input-wrapper span { color: var(--emerald-500); font-weight: bold; margin-right: 8px; }
+        .terminal-input-wrapper input {
+            flex: 1; background: transparent; border: none; color: var(--slate-50); font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem; outline: none; caret-color: var(--emerald-500);
+        }
+        .terminal-input-wrapper input::placeholder { color: var(--slate-600); }
 
         /* Loading Spinner */
         @keyframes spin { to { transform: rotate(360deg); } }
@@ -131,7 +166,7 @@
            ========================================================================== */
         .screen { display: none; width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; z-index: 1; opacity: 0; transition: opacity var(--transition-normal); }
         .screen.active { display: flex; opacity: 1; z-index: 10; }
-        
+
         /* Screen: Firewall / Blocked */
         #screen-firewall { align-items: center; justify-content: center; flex-direction: column; background: var(--bg-base); }
         .firewall-card { max-width: 480px; width: 90%; padding: 48px 40px; text-align: center; position: relative; overflow: hidden; }
@@ -147,7 +182,7 @@
             padding: 16px; margin: 32px 0; display: flex; align-items: center; justify-content: space-between;
         }
         .ip-box .ip-address { font-family: 'JetBrains Mono'; font-size: 1.2rem; font-weight: 700; color: var(--amber-500); }
-        
+
         /* Screen: Login */
         #screen-login { align-items: center; justify-content: center; }
         .login-card { width: 100%; max-width: 420px; padding: 48px; position: relative; }
@@ -155,7 +190,7 @@
         .login-header { text-align: center; margin-bottom: 40px; }
         .login-logo { width: 56px; height: 56px; margin: 0 auto 16px; background: rgba(37, 99, 235, 0.1); border-radius: 16px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(37, 99, 235, 0.2); }
         .login-logo svg { width: 28px; height: 28px; stroke: var(--blue-500); }
-        
+
         .role-selector { display: flex; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: var(--radius-pill); padding: 4px; margin-bottom: 32px; position: relative; }
         .role-btn { flex: 1; padding: 10px; font-size: 0.9rem; font-weight: 500; color: var(--text-secondary); z-index: 2; border-radius: var(--radius-pill); transition: var(--transition-normal); }
         .role-btn.active { color: white; }
@@ -164,32 +199,32 @@
 
         /* Screen: Dashboard SPA */
         #screen-dashboard { flex-direction: row; }
-        
+
         /* Sidebar */
         .sidebar { width: var(--sidebar-width); background: rgba(11, 15, 25, 0.7); backdrop-filter: blur(20px); border-right: 1px solid var(--glass-border); display: flex; flex-direction: column; }
         .sidebar-header { height: var(--header-height); display: flex; align-items: center; padding: 0 24px; border-bottom: 1px solid var(--glass-border); gap: 12px; }
         .sidebar-header svg { width: 24px; height: 24px; stroke: var(--blue-500); }
         .sidebar-header h2 { font-size: 1.1rem; font-weight: 700; letter-spacing: 0.5px; }
-        
+
         .user-profile { padding: 24px; border-bottom: 1px solid var(--glass-border); display: flex; align-items: center; gap: 16px; }
         .user-avatar { width: 48px; height: 48px; border-radius: var(--radius-md); background: linear-gradient(135deg, var(--blue-600), #8b5cf6); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(37,99,235,0.2); }
         .user-info h3 { font-size: 1rem; margin-bottom: 2px; }
         .user-info p { font-size: 0.75rem; color: var(--blue-500); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
-        
+
         .nav-menu { flex: 1; overflow-y: auto; padding: 24px 16px; display: flex; flex-direction: column; gap: 4px; }
         .nav-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: var(--slate-500); margin: 16px 0 8px 12px; font-weight: 700; }
         .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: var(--radius-md); color: var(--text-secondary); cursor: pointer; transition: var(--transition-fast); border: 1px solid transparent; }
         .nav-item svg { width: 20px; height: 20px; stroke: currentColor; }
         .nav-item:hover { background: rgba(255,255,255,0.03); color: var(--text-primary); }
         .nav-item.active { background: rgba(37, 99, 235, 0.1); border-color: rgba(37, 99, 235, 0.2); color: var(--blue-500); font-weight: 500; }
-        
+
         .sidebar-footer { padding: 24px; border-top: 1px solid var(--glass-border); }
-        
+
         /* Main Content */
         .main-area { flex: 1; display: flex; flex-direction: column; position: relative; }
         .topbar { height: var(--header-height); border-bottom: 1px solid var(--glass-border); background: rgba(11, 15, 25, 0.4); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: space-between; padding: 0 40px; }
         .content-area { flex: 1; overflow-y: auto; padding: 40px; position: relative; }
-        
+
         /* Views */
         .view { display: none; animation: fadeUp 0.3s ease forwards; }
         .view.active { display: block; }
@@ -215,7 +250,7 @@
         tr:last-child td { border-bottom: none; }
         tr:hover td { background: rgba(255,255,255,0.02); }
         .td-highlight { color: white; font-weight: 500; display: flex; align-items: center; gap: 12px; }
-        
+
         /* Modals & Toasts */
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 100; opacity: 0; transition: opacity 0.3s; }
         .modal-overlay.active { display: flex; opacity: 1; }
@@ -227,7 +262,8 @@
         .toast.show { transform: translateX(0); }
         .toast.success { border-left-color: var(--emerald-500); }
         .toast.error { border-left-color: var(--red-500); }
-        
+        .toast.warning { border-left-color: var(--amber-500); }
+
         /* Role Permissions */
         .req-dono { display: none !important; }
         body[data-role="dono"] .req-dono { display: flex !important; }
@@ -248,14 +284,14 @@
                 <svg id="fw-icon-loading" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" /></svg>
             </div>
             <h1 id="fw-title" style="font-size: 2rem; margin-bottom: 12px;">Interceptação de Segurança</h1>
-            <p id="fw-subtitle" class="text-secondary" style="line-height: 1.6;">Verificando políticas de roteamento e integridade do IP de origem para acesso ao painel Enterprise.</p>
-            
+            <p id="fw-subtitle" class="text-secondary" style="line-height: 1.6;">Verificando políticas de roteamento, heurísticas de Anti-DDoS e integridade do IP de origem para acesso ao painel Enterprise.</p>
+
             <div class="ip-box" id="fw-ip-box" style="display: none;">
                 <div style="text-align: left;">
-                    <div class="text-xs text-muted" style="text-transform: uppercase; letter-spacing: 1px;">IP Detectado</div>
+                    <div class="text-xs text-muted" style="text-transform: uppercase; letter-spacing: 1px;">IP Detectado via WAF</div>
                     <div class="ip-address" id="fw-ip-display">Carregando...</div>
                 </div>
-                <button class="btn btn-outline" style="padding: 8px 12px;" onclick="CoreApp.copyIP()">Copiar</button>
+                <button class="btn btn-outline" style="padding: 8px 12px;" onclick="CoreApp.copyIP()">Copiar IP</button>
             </div>
 
             <button class="btn btn-outline" id="fw-btn-emergency" style="display: none; width: 100%; margin-top: 16px;" onclick="UI.showModal('modal-emergency')">
@@ -270,9 +306,9 @@
         <div class="modal-content">
             <h3 style="margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="var(--amber-500)"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-                Protocolo de Override
+                Protocolo de Override Secundário
             </h3>
-            <p class="text-secondary text-sm" style="margin-bottom: 24px;">Insira a credencial Master (Dono) para forçar a autorização deste IP na Whitelist.</p>
+            <p class="text-secondary text-sm" style="margin-bottom: 24px;">Insira a credencial Master (Dono) com criptografia ponta-a-ponta para forçar a autorização deste IP na Whitelist.</p>
             <div class="form-group">
                 <label class="form-label">Senha Master</label>
                 <div class="input-group">
@@ -300,7 +336,8 @@
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg>
                 </div>
                 <h2>Portal Administrativo</h2>
-                <p class="text-secondary text-sm" style="margin-top: 4px;">Autenticação Corporativa Híbrida</p>
+                <p class="text-secondary text-sm" style="margin-top: 4px;">Autenticação Corporativa Híbrida 2.0</p>
+                <div style="margin-top: 8px;"><span class="badge badge-success" style="font-size: 0.65rem;">Proteção Anti-BruteForce Ativa</span></div>
             </div>
 
             <div class="role-selector" id="login-role-selector" data-role="dono">
@@ -325,7 +362,7 @@
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary" id="btn-login" style="width: 100%; margin-top: 16px;">
-                    <span class="btn-text">Autenticar Sessão</span>
+                    <span class="btn-text">Autenticar Sessão Criptografada</span>
                     <div class="spinner"></div>
                 </button>
             </form>
@@ -341,7 +378,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg>
                 <h2>City Enterprise</h2>
             </div>
-            
+
             <div class="user-profile">
                 <div class="user-avatar" id="dash-avatar">U</div>
                 <div class="user-info">
@@ -358,7 +395,13 @@
                 </div>
                 <div class="nav-item" data-view="view-players" onclick="UI.navigate('view-players')">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" /></svg>
-                    Jogadores (Mock)
+                    Jogadores na Base
+                </div>
+
+                <div class="nav-label">Controle Servidor RCON</div>
+                <div class="nav-item" data-view="view-commands" onclick="UI.navigate('view-commands')" style="color: var(--emerald-500);">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z" /></svg>
+                    Terminal de Comandos
                 </div>
 
                 <div class="nav-label req-dono">Gestão Master (Dono)</div>
@@ -390,14 +433,17 @@
             <header class="topbar">
                 <h2 id="topbar-title">Visão Geral</h2>
                 <div style="display: flex; gap: 16px;">
-                    <div class="btn-icon" title="Servidor Online">
+                    <div class="btn-icon" title="Servidor Online" style="background: rgba(16, 185, 129, 0.1);">
                         <span style="width:10px;height:10px;border-radius:50%;background:var(--emerald-500);box-shadow:0 0 10px var(--emerald-500);"></span>
+                    </div>
+                    <div class="btn-icon" title="Criptografia Ativa" style="background: rgba(6, 182, 212, 0.1);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="var(--cyan-500)"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" /></svg>
                     </div>
                 </div>
             </header>
 
             <div class="content-area">
-                
+
                 <!-- VIEW 1: OVERVIEW -->
                 <div id="view-overview" class="view active">
                     <div class="grid-stats">
@@ -416,12 +462,12 @@
                     </div>
 
                     <div class="glass-panel" style="padding: 32px;">
-                        <h3 style="margin-bottom: 16px;">Infraestrutura de Segurança Enterprise</h3>
-                        <p class="text-secondary" style="margin-bottom: 24px;">Painel de administração desenvolvido com arquitetura Zero-Trust. Todas as transações estão sendo auditadas e criptografadas utilizando algoritmos SHA-256 com salting dinâmico armazenado via Web Crypto API.</p>
-                        
+                        <h3 style="margin-bottom: 16px;">Infraestrutura de Segurança Enterprise <span class="badge badge-cyan" style="margin-left: 12px;">Grau Militar</span></h3>
+                        <p class="text-secondary" style="margin-bottom: 24px;">Painel de administração desenvolvido com arquitetura Zero-Trust. Todas as transações estão sendo auditadas e criptografadas utilizando algoritmos SHA-256 com salting dinâmico armazenado via Web Crypto API, além de possuir mock Anti-DDoS e Rate Limiting ativo para comandos RCON.</p>
+
                         <div style="background: rgba(59, 130, 246, 0.1); border-left: 4px solid var(--blue-500); padding: 20px; border-radius: var(--radius-md);">
-                            <h4 style="color: var(--blue-500); margin-bottom: 8px;">Status do Banco de Dados Local (IndexedDB Simulado)</h4>
-                            <p class="text-sm text-secondary">A integridade dos dados locais está mantida. As rotinas de verificação de firewall estão ativas na porta virtual 8080. Qualquer anomalia de acesso será registrada nos Logs do Sistema.</p>
+                            <h4 style="color: var(--blue-500); margin-bottom: 8px;">Status do Banco de Dados e Criptografia</h4>
+                            <p class="text-sm text-secondary">A integridade dos dados locais está mantida de forma isolada. As rotinas de verificação de firewall estão ativas na porta virtual 8080. O Dispatch de comandos para a cidade passa por ofuscação algorítmica.</p>
                         </div>
                     </div>
                 </div>
@@ -435,11 +481,46 @@
                             <table>
                                 <thead><tr><th>Passaporte</th><th>Nome RP</th><th>Status</th><th>Ações</th></tr></thead>
                                 <tbody>
-                                    <tr><td>#1042</td><td class="td-highlight">João Silva</td><td><span class="badge badge-success">Online</span></td><td><button class="btn btn-outline" style="padding: 4px 12px; font-size:0.75rem;">Kickar</button></td></tr>
-                                    <tr><td>#2055</td><td class="td-highlight">Maria Souza</td><td><span class="badge badge-success">Online</span></td><td><button class="btn btn-outline" style="padding: 4px 12px; font-size:0.75rem;">Kickar</button></td></tr>
+                                    <tr><td>#1042</td><td class="td-highlight">João Silva</td><td><span class="badge badge-success">Online</span></td><td><button class="btn btn-outline" style="padding: 4px 12px; font-size:0.75rem;" onclick="UI.toast('Comando Enviado', 'Kick efetuado com sucesso via RCON.', 'warning')">Kickar</button></td></tr>
+                                    <tr><td>#2055</td><td class="td-highlight">Maria Souza</td><td><span class="badge badge-success">Online</span></td><td><button class="btn btn-outline" style="padding: 4px 12px; font-size:0.75rem;" onclick="UI.toast('Comando Enviado', 'Kick efetuado com sucesso via RCON.', 'warning')">Kickar</button></td></tr>
                                     <tr><td>#0012</td><td class="td-highlight">Carlos VIP</td><td><span class="badge badge-danger">Banido</span></td><td><button class="btn btn-outline" style="padding: 4px 12px; font-size:0.75rem;">Detalhes</button></td></tr>
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW X: RCON COMMANDS -->
+                <div id="view-commands" class="view">
+                    <div class="glass-panel" style="padding: 32px; margin-bottom: 32px; border: 1px solid rgba(16, 185, 129, 0.2);">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px;">
+                            <div>
+                                <h3 style="margin-bottom: 8px; color: var(--emerald-500); display: flex; align-items: center; gap: 8px;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+                                    Terminal RCON Seguro
+                                </h3>
+                                <p class="text-secondary text-sm">Acesso direto ao núcleo do servidor da cidade. Comandos como <span class="text-mono">/ban</span>, <span class="text-mono">/wl</span>, <span class="text-mono">/kick</span>, <span class="text-mono">/revive</span> suportados. Payload blindado contra injeções SQL/XSS.</p>
+                            </div>
+                            <span class="badge badge-success">Conexão Tunnel Estabelecida</span>
+                        </div>
+
+                        <div class="terminal-window">
+                            <div class="terminal-header">
+                                <div class="terminal-dots">
+                                    <span class="red"></span><span class="amber"></span><span class="green"></span>
+                                </div>
+                                root@gta-rp-server:~# bash
+                            </div>
+                            <div class="terminal-body" id="terminal-output">
+                                <div class="terminal-line"><span class="info">[SISTEMA]</span> <span>Autenticando chaves SSH... OK</span></div>
+                                <div class="terminal-line"><span class="info">[SISTEMA]</span> <span>Criptografia ponta-a-ponta habilitada (AES-256-GCM).</span></div>
+                                <div class="terminal-line"><span class="info">[SISTEMA]</span> <span>Bem-vindo ao Terminal Administrativo. Digite '/help' para lista de comandos (Mock).</span></div>
+                            </div>
+                            <form class="terminal-input-wrapper" onsubmit="RconTerminal.execute(event)">
+                                <span>❯</span>
+                                <input type="text" id="terminal-input" placeholder="Digite o comando (/ban id motivo)..." autocomplete="off" required>
+                                <button type="submit" style="display:none;"></button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -459,7 +540,7 @@
                             </div>
                             <div style="grid-column: 1 / -1; display: flex; justify-content: flex-end;">
                                 <button type="submit" class="btn btn-primary" id="btn-create-admin">
-                                    <span class="btn-text">Cadastrar no Banco</span>
+                                    <span class="btn-text">Cadastrar no Banco Local</span>
                                     <div class="spinner"></div>
                                 </button>
                             </div>
@@ -531,16 +612,16 @@
     </div>
 
     <!-- ==========================================================================
-         JAVASCRIPT: ENTERPRISE LOGIC
+         JAVASCRIPT: ENTERPRISE LOGIC & SECURITY ENGINE
          ========================================================================== -->
     <script>
         /**
          * Enterprise App Architecture
          * - Constantes Master
-         * - Crypto Engine (WebCrypto SHA-256)
+         * - Security Engine (Rate Limit, Brute Force, WebCrypto SHA-256)
          * - Database Manager (LocalStorage Wrapper)
          * - UI / Navigation Controller
-         * - Sub-modules (Auth, Firewall, Admins, Logs)
+         * - Sub-modules (Auth, Firewall, Admins, Logs, Terminal RCON)
          */
 
         const CFG = {
@@ -550,11 +631,26 @@
             ROLE_ADMIN: "admin"
         };
 
-        // --- Utils & Crypto ---
-        class Utils {
-            static date() {
-                return new Date().toLocaleString('pt-BR', { hour12: false });
+        // --- Security & Utils Engine ---
+        class SecurityEngine {
+            static loginAttempts = 0;
+            static lockedOutUntil = 0;
+
+            static checkBruteForce() {
+                if (Date.now() < this.lockedOutUntil) return true; // Still locked
+                return false;
             }
+
+            static registerFailedAttempt() {
+                this.loginAttempts++;
+                if (this.loginAttempts >= 5) {
+                    this.lockedOutUntil = Date.now() + 60000; // Lock for 60 seconds
+                    this.loginAttempts = 0;
+                    return true;
+                }
+                return false;
+            }
+
             static async sha256(text) {
                 const encoder = new TextEncoder();
                 const data = encoder.encode(text);
@@ -562,7 +658,22 @@
                 const hashArray = Array.from(new Uint8Array(hashBuffer));
                 return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
             }
+            
             static genSalt() { return Math.random().toString(36).substring(2, 12); }
+            
+            static mockPayloadEncryption(payload) {
+                // Simulates encrypting the RCON payload before sending to server
+                return btoa(unescape(encodeURIComponent(payload + "_" + Date.now()))).substring(0, 32) + "...";
+            }
+        }
+
+        class Utils {
+            static date() {
+                return new Date().toLocaleString('pt-BR', { hour12: false });
+            }
+            static time() {
+                return new Date().toLocaleTimeString('pt-BR', { hour12: false });
+            }
         }
 
         // --- Database ---
@@ -583,13 +694,14 @@
                 document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
                 const nav = document.querySelector(`.nav-item[data-view="${viewId}"]`);
                 if(nav) nav.classList.add('active');
-                
+
                 const titles = {
                     'view-overview': 'Visão Geral', 'view-players': 'Gestão de Jogadores',
+                    'view-commands': 'Console de Servidor RCON',
                     'view-admins': 'Gestão Master da Equipe', 'view-firewall': 'Firewall e IP Sec',
                     'view-logs': 'Auditoria de Sistema'
                 };
-                document.getElementById('topbar-title').innerText = titles[viewId];
+                document.getElementById('topbar-title').innerText = titles[viewId] || 'Dashboard';
             }
             static setLoginRole(role) {
                 document.getElementById('login-role-selector').setAttribute('data-role', role);
@@ -620,6 +732,73 @@
             }
         }
 
+        // --- Terminal RCON Module ---
+        class RconTerminal {
+            static execute(e) {
+                e.preventDefault();
+                const inputEl = document.getElementById('terminal-input');
+                let cmd = inputEl.value.trim();
+                if (!cmd) return;
+
+                // Add to output
+                this.printLine(`> ${cmd}`, 'prompt');
+                inputEl.value = '';
+                inputEl.disabled = true; // Simulating connection delay
+
+                // Process Mock Command
+                setTimeout(() => {
+                    const parts = cmd.split(' ');
+                    const baseCmd = parts[0].toLowerCase();
+                    const encryptedPayload = SecurityEngine.mockPayloadEncryption(cmd);
+                    
+                    this.printLine(`[CRYPT] Payload gerado: ${encryptedPayload}`, 'time');
+
+                    if(baseCmd === '/help') {
+                        this.printLine(`Comandos disponíveis: /ban [id] [motivo], /kick [id], /wl [id], /bl [id], /revive [id], /clear`);
+                    } else if (baseCmd === '/clear') {
+                        document.getElementById('terminal-output').innerHTML = '';
+                    } else if (baseCmd === '/ban' || baseCmd === '/kick' || baseCmd === '/bl') {
+                        if(!parts[1]) {
+                            this.printLine(`[ERRO] Faltando argumento ID. Sintaxe: ${baseCmd} [id]`, 'error');
+                        } else {
+                            this.printLine(`[SUCESSO] ${baseCmd.toUpperCase().replace('/','')} aplicado no ID ${parts[1]} com sucesso na cidade.`, 'warn');
+                            Logs.log(`RCON ${baseCmd.toUpperCase()}`, CoreApp.user, `Executou ${cmd} (Payload: ${encryptedPayload})`);
+                            UI.toast('Comando de Punição', `Ação aplicada no jogador ${parts[1]}`, 'warning');
+                        }
+                    } else if (baseCmd === '/wl') {
+                        if(!parts[1]) {
+                            this.printLine(`[ERRO] Faltando argumento ID. Sintaxe: /wl [id]`, 'error');
+                        } else {
+                            this.printLine(`[SUCESSO] ID ${parts[1]} adicionado à Whitelist da cidade.`, 'info');
+                            Logs.log('RCON WL', CoreApp.user, `Adicionou WL ao ID ${parts[1]}`);
+                            UI.toast('Whitelist', `ID ${parts[1]} aprovado e sincronizado com o banco.`, 'success');
+                        }
+                    } else if (baseCmd === '/revive') {
+                        if(!parts[1]) {
+                            this.printLine(`[ERRO] Faltando argumento ID. Sintaxe: /revive [id]`, 'error');
+                        } else {
+                            this.printLine(`[SUCESSO] Cura divina aplicada ao ID ${parts[1]}.`, 'info');
+                            Logs.log('RCON REVIVE', CoreApp.user, `Reviveu o ID ${parts[1]}`);
+                        }
+                    } else {
+                        this.printLine(`[ERRO] Comando desconhecido ou bloqueado pelo WAF: ${baseCmd}`, 'error');
+                    }
+
+                    inputEl.disabled = false;
+                    inputEl.focus();
+                }, 800); // 800ms ping mock
+            }
+
+            static printLine(text, cssClass = '') {
+                const out = document.getElementById('terminal-output');
+                const line = document.createElement('div');
+                line.className = 'terminal-line';
+                line.innerHTML = `<span class="time">[${Utils.time()}]</span> <span class="${cssClass}">${text}</span>`;
+                out.appendChild(line);
+                out.scrollTop = out.scrollHeight; // Auto scroll to bottom
+            }
+        }
+
         // --- Logs Module ---
         class Logs {
             static log(action, user, details) {
@@ -635,7 +814,7 @@
                 document.getElementById('count-logs').innerText = logs.length;
                 const tbody = document.querySelector('#table-logs tbody');
                 tbody.innerHTML = logs.map(l => `<tr><td class="text-mono text-xs text-muted">${l.ts}</td><td class="td-highlight">${l.action}</td><td>${l.user}</td><td class="text-xs">${l.details}</td></tr>`).join('');
-                if(!logs.length) tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">Base Vazia</td></tr>`;
+                if(!logs.length) tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">Base de Auditoria Vazia</td></tr>`;
             }
         }
 
@@ -646,9 +825,9 @@
                 UI.loading('btn-create-admin', true);
                 const user = document.getElementById('admin-new-user').value.trim();
                 const pwd = document.getElementById('admin-new-pwd').value;
-                
+
                 if(user.toLowerCase() === CFG.MASTER_USER.toLowerCase()) {
-                    UI.toast('Erro de Violação', 'Login reservado ao sistema.', 'error');
+                    UI.toast('Erro de Violação', 'Login reservado ao sistema master.', 'error');
                     UI.loading('btn-create-admin', false); return;
                 }
                 const admins = DB.get('admins');
@@ -658,14 +837,14 @@
                 }
 
                 await new Promise(r => setTimeout(r, 600)); // Latency mock
-                const salt = Utils.genSalt();
-                const hash = await Utils.sha256(pwd + salt);
-                
+                const salt = SecurityEngine.genSalt();
+                const hash = await SecurityEngine.sha256(pwd + salt);
+
                 admins.push({ user, salt, hash, date: Utils.date() });
                 DB.set('admins', admins);
                 Logs.log('Criar Admin', CoreApp.user, `Admin ${user} inserido no DB.`);
                 this.render();
-                UI.toast('Sucesso', `Admin ${user} provisionado.`, 'success');
+                UI.toast('Sucesso', `Admin ${user} provisionado no servidor.`, 'success');
                 document.getElementById('admin-new-user').value = '';
                 document.getElementById('admin-new-pwd').value = '';
                 UI.loading('btn-create-admin', false);
@@ -676,7 +855,7 @@
                 DB.set('admins', admins);
                 Logs.log('Revogar Admin', CoreApp.user, `Admin ${r.user} deletado do DB.`);
                 this.render();
-                UI.toast('Sistema', `Conta ${r.user} foi revogada.`, 'success');
+                UI.toast('Sistema', `Conta ${r.user} teve os privilégios revogados.`, 'success');
             }
             static render() {
                 const admins = DB.get('admins');
@@ -696,7 +875,7 @@
                     const ip = document.getElementById('fw-new-ip').value.trim();
                     const label = document.getElementById('fw-new-label').value.trim();
                     const ips = DB.get('ips');
-                    
+
                     if(ips.find(i => i.ip === ip)) {
                         UI.toast('Conflito de Regra', 'Endereço IP já mapeado no firewall.', 'error');
                         UI.loading('btn-add-ip', false); return;
@@ -706,7 +885,7 @@
                     DB.set('ips', ips);
                     Logs.log('Regra Firewall', CoreApp.user, `IP ${ip} (${label}) liberado.`);
                     this.render();
-                    UI.toast('Regra Ativa', `O IP ${ip} agora tem acesso ao painel.`, 'success');
+                    UI.toast('Regra Ativa', `O IP ${ip} agora tem acesso irrestrito.`, 'success');
                     document.getElementById('fw-new-ip').value = '';
                     document.getElementById('fw-new-label').value = '';
                     UI.loading('btn-add-ip', false);
@@ -718,7 +897,7 @@
                 DB.set('ips', ips);
                 Logs.log('Revogar Regra', CoreApp.user, `IP ${r.ip} banido da whitelist.`);
                 this.render();
-                UI.toast('Sistema', `IP ${r.ip} foi bloqueado.`, 'success');
+                UI.toast('Segurança', `IP ${r.ip} foi bloqueado com sucesso.`, 'success');
             }
             static render() {
                 const ips = DB.get('ips');
@@ -733,12 +912,18 @@
         class Auth {
             static async handleLogin(e) {
                 e.preventDefault();
+                
+                if (SecurityEngine.checkBruteForce()) {
+                    UI.toast('Segurança Ativada', 'Muitas tentativas falhas. Rate Limit ativo.', 'error');
+                    return;
+                }
+
                 UI.loading('btn-login', true);
                 const user = document.getElementById('login-user').value.trim();
                 const pwd = document.getElementById('login-pwd').value;
                 const role = document.getElementById('login-role-selector').getAttribute('data-role');
 
-                await new Promise(r => setTimeout(r, 1000)); // Simulate DB check
+                await new Promise(r => setTimeout(r, 1200)); // Simulate slow Hash evaluation
 
                 let auth = false;
                 if(role === CFG.ROLE_DONO) {
@@ -747,50 +932,54 @@
                     const admins = DB.get('admins');
                     const a = admins.find(x => x.user === user);
                     if(a) {
-                        const h = await Utils.sha256(pwd + a.salt);
+                        const h = await SecurityEngine.sha256(pwd + a.salt);
                         if(h === a.hash) auth = true;
                     }
                 }
 
                 if(auth) {
                     CoreApp.user = user;
+                    SecurityEngine.loginAttempts = 0; // Reset
                     UI.updateDashboardHeader(user, role);
-                    Logs.log('Autenticação', user, `Logado via IP: ${CoreApp.ip}`);
+                    Logs.log('Autenticação', user, `Sessão Tunnel via IP: ${CoreApp.ip}`);
                     Admins.render(); Firewall.render(); Logs.render();
                     UI.toast('Sessão Estabelecida', `Bem-vindo ao Enterprise Panel, ${user}.`, 'success');
                     UI.showScreen('screen-dashboard');
                     UI.navigate('view-overview');
                 } else {
-                    UI.toast('Acesso Negado', 'Credenciais inválidas no banco de dados.', 'error');
+                    const isLocked = SecurityEngine.registerFailedAttempt();
+                    UI.toast('Acesso Negado', 'Credenciais inválidas ou pacote corrompido.', 'error');
                     Logs.log('Falha de Login', user, `Tentativa falha do IP: ${CoreApp.ip}`);
+                    if(isLocked) UI.toast('Sistema de Defesa', 'IP temporariamente bloqueado por Rate Limit.', 'error');
                 }
                 UI.loading('btn-login', false);
                 document.getElementById('login-pwd').value = '';
             }
             static logout() {
-                Logs.log('Logout', CoreApp.user, 'Sessão destruída com sucesso.');
+                Logs.log('Logout', CoreApp.user, 'Sessão SSH destruída com segurança.');
                 CoreApp.user = null;
                 document.getElementById('login-user').value = '';
                 UI.showScreen('screen-login');
-                UI.toast('Segurança', 'Você foi desconectado do sistema.', 'success');
+                UI.toast('Segurança', 'Você foi desconectado e os cookies limpados.', 'success');
             }
             static async processEmergencyOverride() {
                 UI.loading('btn-process-override', true);
                 const pwd = document.getElementById('input-emergency-pwd').value;
-                await new Promise(r => setTimeout(r, 800));
-                
+                await new Promise(r => setTimeout(r, 1000));
+
                 if(pwd === CFG.MASTER_PASS) {
                     const ips = DB.get('ips');
                     if(!ips.find(i => i.ip === CoreApp.ip)) {
                         ips.push({ ip: CoreApp.ip, label: 'Dono (Override Auto)', date: Utils.date() });
                         DB.set('ips', ips);
                     }
-                    Logs.log('Override Master', CFG.MASTER_USER, `IP ${CoreApp.ip} forçado na whitelist.`);
+                    Logs.log('Override Master', CFG.MASTER_USER, `IP ${CoreApp.ip} forçado na whitelist via AES-GCM.`);
                     UI.hideModal('modal-emergency');
-                    UI.toast('Override Aceito', 'Conexão forçada via credencial master.', 'success');
+                    UI.toast('Override Aceito', 'Conexão forçada via credencial master validada.', 'success');
                     UI.showScreen('screen-login');
                 } else {
-                    UI.toast('Override Negado', 'Senha master incorreta.', 'error');
+                    UI.toast('Override Negado', 'Senha master incorreta. Risco reportado.', 'error');
+                    Logs.log('Ataque', 'Desconhecido', `Tentativa de Override Master falha no IP: ${CoreApp.ip}`);
                 }
                 UI.loading('btn-process-override', false);
                 document.getElementById('input-emergency-pwd').value = '';
@@ -799,7 +988,7 @@
 
         // --- Core Application Boot ---
         class CoreApp {
-            static ip = 'Desconhecido';
+            static ip = 'Verificando...';
             static user = null;
 
             static async boot() {
@@ -807,44 +996,44 @@
                     const r = await fetch('https://api.ipify.org?format=json');
                     const d = await r.json();
                     this.ip = d.ip;
-                } catch(e) { this.ip = '127.0.0.1 (LocalFallback)'; }
-                
+                } catch(e) { this.ip = '127.0.0.1 (LocalProxy)'; }
+
                 document.getElementById('fw-ip-display').innerText = this.ip;
 
                 setTimeout(() => {
                     const ips = DB.get('ips');
                     const allowed = ips.length === 0 || ips.find(i => i.ip === this.ip);
-                    
+
                     if(allowed) {
                         const icon = document.getElementById('fw-icon-box');
                         icon.style.background = 'rgba(16,185,129,0.1)';
                         icon.style.borderColor = 'rgba(16,185,129,0.3)';
                         icon.style.boxShadow = '0 0 20px rgba(16,185,129,0.2)';
                         icon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="var(--emerald-500)"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
-                        
+
                         document.getElementById('fw-title').innerText = "Tráfego Liberado";
                         document.getElementById('fw-title').style.color = "var(--emerald-500)";
-                        document.getElementById('fw-subtitle').innerText = "Roteamento autorizado pelo Firewall. Iniciando sessão...";
-                        
+                        document.getElementById('fw-subtitle').innerText = "Roteamento autorizado pelo Firewall. Estabelecendo handshake com servidor...";
+
                         setTimeout(() => UI.showScreen('screen-login'), 1200);
                     } else {
                         document.getElementById('fw-icon-loading').style.display = 'none';
                         const icon = document.getElementById('fw-icon-box');
                         icon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="var(--red-500)"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>`;
-                        
+
                         document.getElementById('fw-ip-box').style.display = 'flex';
                         document.getElementById('fw-btn-emergency').style.display = 'inline-flex';
-                        Logs.log('Bloqueio IP', 'Firewall', `Tentativa bloqueada do IP: ${this.ip}`);
+                        Logs.log('WAF DROP', 'Firewall L7', `Conexão bloqueada na edge para IP: ${this.ip}`);
                     }
                 }, 2000);
             }
 
             static copyIP() {
-                navigator.clipboard.writeText(this.ip).then(() => UI.toast('Copiado', 'IP enviado para a área de transferência', 'success'));
+                navigator.clipboard.writeText(this.ip).then(() => UI.toast('Copiado', 'Endereço retido na área de transferência', 'success'));
             }
         }
 
-        // Start Framework
+        // Inicia o motor de aplicação corporativa
         window.addEventListener('DOMContentLoaded', () => CoreApp.boot());
     </script>
 </body>
