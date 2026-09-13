@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Admin - GTA RP</title>
+    <style>
+        :root {
+            --primary: #8b00ff; /* Roxo estilo RP */
+            --bg-dark: #121212;
+            --bg-card: #1e1e1e;
+            --text-light: #f5f5f5;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: var(--bg-card);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(139, 0, 255, 0.3);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h2, h3 {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            background-color: #2a2a2a;
+            border: 1px solid #444;
+            color: white;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #6a00cc;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Dashboard Styles */
+        #dashboard-container {
+            max-width: 800px;
+            align-items: flex-start;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .panel-section {
+            background-color: #2a2a2a;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .command-btn {
+            background-color: #333;
+            margin-bottom: 10px;
+            text-align: left;
+            padding-left: 15px;
+        }
+
+        .command-btn:hover {
+            background-color: #444;
+            border-left: 4px solid var(--primary);
+        }
+
+        .logout-btn {
+            background-color: #d32f2f;
+            margin-top: 20px;
+        }
+
+        .logout-btn:hover {
+            background-color: #b71c1c;
+        }
+
+        #msg-box {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+            min-height: 20px;
+        }
+        
+        .success { color: #4caf50; }
+        .error { color: #f44336; }
+    </style>
+</head>
+<body>
+
+    <!-- TELA DE LOGIN -->
+    <div class="container" id="login-container">
+        <h2>Cidade RP - Login</h2>
+        
+        <div class="form-group">
+            <label for="login-type">Acessar como:</label>
+            <select id="login-type">
+                <option value="dono">Dono da Cidade</option>
+                <option value="admin">Administrador</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="username">Usuário</label>
+            <input type="text" id="username" placeholder="Digite seu usuário" autocomplete="off">
+        </div>
+
+        <div class="form-group">
+            <label for="password">Senha</label>
+            <input type="password" id="password" placeholder="Digite sua senha">
+        </div>
+
+        <button onclick="realizarLogin()">Entrar no Painel</button>
+        <div id="msg-box"></div>
+    </div>
+
+    <!-- TELA DO PAINEL (DASHBOARD) -->
+    <div class="container hidden" id="dashboard-container">
+        <h2>Painel de Controle - <span id="user-role-display"></span></h2>
+        <p>Bem-vindo(a), <strong id="logged-user"></strong>.</p>
+
+        <div class="dashboard-grid">
+            
+            <!-- Comandos (Visível para ambos) -->
+            <div class="panel-section">
+                <h3>Comandos Rápidos</h3>
+                <button class="command-btn" onclick="executarComando('reviver')">Reviver Área (/reviverall)</button>
+                <button class="command-btn" onclick="executarComando('limpar')">Limpar Veículos (/dvall)</button>
+                <button class="command-btn" onclick="executarComando('anuncio')">Anúncio Global (/anuncio)</button>
+                <button class="command-btn" onclick="executarComando('clima')">Mudar Clima (/clima)</button>
+            </div>
+
+            <!-- Área Exclusiva do Dono -->
+            <div class="panel-section hidden" id="owner-section">
+                <h3>Gerenciar Administradores</h3>
+                <p style="font-size: 12px; color: #aaa;">Somente o Dono pode criar novas contas de Admin.</p>
+                
+                <div class="form-group">
+                    <label>Novo Usuário Admin</label>
+                    <input type="text" id="new-admin-user" placeholder="Nome do Admin">
+                </div>
+                <div class="form-group">
+                    <label>Senha do Admin</label>
+                    <input type="password" id="new-admin-pass" placeholder="Senha Forte">
+                </div>
+                <button onclick="criarAdmin()" style="background-color: #4caf50;">Criar Conta Admin</button>
+                <div id="admin-msg-box" style="margin-top: 10px; font-size: 13px;"></div>
+            </div>
+
+        </div>
+
+        <button class="logout-btn" onclick="sair()">Desconectar</button>
+    </div>
+
+    <script>
+        // Função para Criptografar Senhas (SHA-256)
+        async function sha256(mensagem) {
+            const msgBuffer = new TextEncoder().encode(mensagem);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            return hashHex;
+        }
+
+        // Credenciais Fixas do Dono (HillZera)
+        const DONO_USER = "HillZera";
+        const DONO_PASS_RAW = "01051994Senna@Lp12";
+        let DONO_HASH = "";
+
+        // Inicializa o sistema gerando o hash do dono e carregando admins
+        async function init() {
+            DONO_HASH = await sha256(DONO_PASS_RAW);
+            
+            // Inicializa a base de admins no LocalStorage se não existir
+            if (!localStorage.getItem('rp_admins')) {
+                localStorage.setItem('rp_admins', JSON.stringify({}));
+            }
+        }
+        init();
+
+        // Função de Login
+        async function realizarLogin() {
+            const tipo = document.getElementById('login-type').value;
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value;
+            const msgBox = document.getElementById('msg-box');
+
+            if (!user || !pass) {
+                mostrarMensagem(msgBox, "Preencha todos os campos!", "error");
+                return;
+            }
+
+            const hashPass = await sha256(pass);
+
+            if (tipo === 'dono') {
+                if (user === DONO_USER && hashPass === DONO_HASH) {
+                    abrirDashboard('Dono', user);
+                } else {
+                    mostrarMensagem(msgBox, "Credenciais de Dono incorretas!", "error");
+                }
+            } else if (tipo === 'admin') {
+                const admins = JSON.parse(localStorage.getItem('rp_admins'));
+                if (admins[user] && admins[user] === hashPass) {
+                    abrirDashboard('Administrador', user);
+                } else {
+                    mostrarMensagem(msgBox, "Usuário ou senha de Admin incorretos!", "error");
+                }
+            }
+        }
+
+        // Abre o painel após o login
+        function abrirDashboard(role, username) {
+            document.getElementById('login-container').classList.add('hidden');
+            document.getElementById('dashboard-container').classList.remove('hidden');
+            
+            document.getElementById('user-role-display').innerText = role;
+            document.getElementById('logged-user').innerText = username;
+
+            // Exibe a área de criar admins apenas se for o Dono
+            const ownerSection = document.getElementById('owner-section');
+            if (role === 'Dono') {
+                ownerSection.classList.remove('hidden');
+            } else {
+                ownerSection.classList.add('hidden');
+            }
+        }
+
+        // Função para o Dono criar novos admins
+        async function criarAdmin() {
+            const newUser = document.getElementById('new-admin-user').value.trim();
+            const newPass = document.getElementById('new-admin-pass').value;
+            const msgBox = document.getElementById('admin-msg-box');
+
+            if (!newUser || !newPass) {
+                mostrarMensagem(msgBox, "Preencha usuário e senha!", "error");
+                return;
+            }
+
+            if (newUser === DONO_USER) {
+                mostrarMensagem(msgBox, "Você não pode usar o nome do Dono!", "error");
+                return;
+            }
+
+            const admins = JSON.parse(localStorage.getItem('rp_admins'));
+            
+            if (admins[newUser]) {
+                mostrarMensagem(msgBox, "Este administrador já existe!", "error");
+                return;
+            }
+
+            // Criptografa a senha do admin antes de salvar
+            const hashedPass = await sha256(newPass);
+            admins[newUser] = hashedPass;
+            
+            localStorage.setItem('rp_admins', JSON.stringify(admins));
+            
+            mostrarMensagem(msgBox, `Admin ${newUser} criado com sucesso!`, "success");
+            
+            // Limpa os campos
+            document.getElementById('new-admin-user').value = "";
+            document.getElementById('new-admin-pass').value = "";
+        }
+
+        // Simulação de Comandos
+        function executarComando(cmd) {
+            alert(`Comando [ ${cmd.toUpperCase()} ] enviado para o servidor!`);
+            // Aqui entraria a integração real com a API do seu servidor FiveM (usando fetch/axios)
+        }
+
+        // Função de Logout
+        function sair() {
+            document.getElementById('dashboard-container').classList.add('hidden');
+            document.getElementById('login-container').classList.remove('hidden');
+            
+            // Limpa os campos de login
+            document.getElementById('username').value = "";
+            document.getElementById('password').value = "";
+            document.getElementById('msg-box').innerText = "";
+        }
+
+        // Função Auxiliar para Mensagens
+        function mostrarMensagem(elemento, texto, classe) {
+            elemento.innerText = texto;
+            elemento.className = classe;
+            setTimeout(() => { elemento.innerText = ""; }, 3000);
+        }
+    </script>
+</body>
+</html>
