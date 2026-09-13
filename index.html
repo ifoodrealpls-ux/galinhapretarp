@@ -3,337 +3,466 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Admin - GTA RP</title>
+    <title>Painel Admin Premium - GTA RP</title>
     <style>
         :root {
-            --primary: #8b00ff; /* Roxo estilo RP */
-            --bg-dark: #121212;
-            --bg-card: #1e1e1e;
-            --text-light: #f5f5f5;
+            --bg-main: #0b1120; /* Fundo principal escuro */
+            --bg-panel: #1e293b; /* Fundo dos cartões */
+            --primary: #3b82f6; /* Azul Premium */
+            --primary-hover: #2563eb;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
         }
 
         body {
             margin: 0;
-            padding: 0;
+            padding: 20px;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-light);
+            background-color: var(--bg-main);
+            color: var(--text-main);
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
+            box-sizing: border-box;
         }
 
-        .container {
-            background-color: var(--bg-card);
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(139, 0, 255, 0.3);
+        /* Estilo Vidro/Premium para os painéis */
+        .glass-panel {
+            background-color: var(--bg-panel);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), 0 0 20px rgba(59, 130, 246, 0.1);
             width: 100%;
-            max-width: 400px;
+            max-width: 450px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            transition: all 0.3s ease;
         }
 
-        h2, h3 {
+        .dashboard-panel {
+            max-width: 900px;
+            padding: 30px;
+        }
+
+        h2 {
             text-align: center;
             color: var(--primary);
-            margin-bottom: 20px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            font-size: 26px;
         }
 
-        .form-group {
-            margin-bottom: 15px;
+        .input-group {
+            margin-bottom: 20px;
         }
 
         label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            color: var(--text-muted);
             font-size: 14px;
+            margin-left: 15px;
         }
 
+        /* Inputs e Selects Arredondados */
         input, select {
             width: 100%;
-            padding: 10px;
-            background-color: #2a2a2a;
-            border: 1px solid #444;
+            padding: 16px 25px;
+            border-radius: 50px;
+            border: 1px solid #334155;
+            background-color: #0f172a;
             color: white;
-            border-radius: 5px;
             box-sizing: border-box;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.3s;
         }
 
         input:focus, select:focus {
-            outline: none;
             border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
         }
 
+        /* Botões Arredondados e com Sombra */
         button {
             width: 100%;
-            padding: 10px;
-            background-color: var(--primary);
-            color: white;
+            padding: 16px 25px;
+            border-radius: 50px;
             border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
+            background: linear-gradient(135deg, var(--primary), #1d4ed8);
+            color: white;
             font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
             margin-top: 10px;
-            transition: 0.3s;
         }
 
         button:hover {
-            background-color: #6a00cc;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(59, 130, 246, 0.6);
         }
 
         .hidden {
             display: none !important;
         }
 
-        /* Dashboard Styles */
-        #dashboard-container {
-            max-width: 800px;
-            align-items: flex-start;
-        }
-
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        .panel-section {
-            background-color: #2a2a2a;
-            padding: 20px;
-            border-radius: 8px;
-            border-left: 4px solid var(--primary);
-        }
-
-        .command-btn {
-            background-color: #333;
-            margin-bottom: 10px;
-            text-align: left;
-            padding-left: 15px;
-        }
-
-        .command-btn:hover {
-            background-color: #444;
-            border-left: 4px solid var(--primary);
-        }
-
-        .logout-btn {
-            background-color: #d32f2f;
-            margin-top: 20px;
-        }
-
-        .logout-btn:hover {
-            background-color: #b71c1c;
-        }
-
-        #msg-box {
+        .msg {
             text-align: center;
-            margin-top: 10px;
+            margin-top: 15px;
             font-size: 14px;
             min-height: 20px;
+            font-weight: 500;
         }
+
+        .success { color: #10b981; }
+        .error { color: #ef4444; }
+
+        /* Grid do Dashboard */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            background-color: #0f172a;
+            padding: 25px;
+            border-radius: 25px;
+            border: 1px solid #334155;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: var(--text-main);
+            font-size: 18px;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        .btn-small {
+            padding: 12px 20px;
+            font-size: 14px;
+            margin-bottom: 12px;
+            border-radius: 50px;
+            background: #1e293b;
+            border: 1px solid #334155;
+            box-shadow: none;
+        }
+
+        .btn-small:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444, #b91c1c);
+            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
+            margin-top: 30px;
+        }
+
+        .btn-danger:hover {
+            box-shadow: 0 12px 25px rgba(239, 68, 68, 0.6);
+        }
+
+        /* Tabela de Admins */
+        .table-container {
+            margin-top: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+            border-radius: 15px;
+            background: #0b1120;
+            padding: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #1e293b;
+        }
+
+        th {
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        td {
+            color: #cbd5e1;
+        }
+
+        .hash-text {
+            font-family: monospace;
+            color: #64748b;
+            font-size: 11px;
+        }
+
+        /* Animação de Carregamento (Spinner) */
+        .loader {
+            display: none;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        .success { color: #4caf50; }
-        .error { color: #f44336; }
+        .btn-content { display: block; }
+        .loading .btn-content { display: none; }
+        .loading .loader { display: block; }
     </style>
 </head>
 <body>
 
     <!-- TELA DE LOGIN -->
-    <div class="container" id="login-container">
-        <h2>Cidade RP - Login</h2>
-        
-        <div class="form-group">
-            <label for="login-type">Acessar como:</label>
+    <div class="glass-panel" id="login-container">
+        <h2>Painel Admin</h2>
+
+        <div class="input-group">
+            <label for="login-type">Nível de Acesso</label>
             <select id="login-type">
-                <option value="dono">Dono da Cidade</option>
+                <option value="dono">Dono (Proprietário)</option>
                 <option value="admin">Administrador</option>
             </select>
         </div>
 
-        <div class="form-group">
+        <div class="input-group">
             <label for="username">Usuário</label>
-            <input type="text" id="username" placeholder="Digite seu usuário" autocomplete="off">
+            <input type="text" id="username" placeholder="Digite seu login..." autocomplete="off">
         </div>
 
-        <div class="form-group">
-            <label for="password">Senha</label>
-            <input type="password" id="password" placeholder="Digite sua senha">
+        <div class="input-group">
+            <label for="password">Senha Autenticada</label>
+            <input type="password" id="password" placeholder="••••••••••••">
         </div>
 
-        <button onclick="realizarLogin()">Entrar no Painel</button>
-        <div id="msg-box"></div>
+        <button id="login-btn" onclick="realizarLogin()">
+            <span class="btn-content">Acessar Sistema</span>
+            <div class="loader"></div>
+        </button>
+        <div id="msg-box" class="msg"></div>
     </div>
 
     <!-- TELA DO PAINEL (DASHBOARD) -->
-    <div class="container hidden" id="dashboard-container">
-        <h2>Painel de Controle - <span id="user-role-display"></span></h2>
-        <p>Bem-vindo(a), <strong id="logged-user"></strong>.</p>
+    <div class="glass-panel dashboard-panel hidden" id="dashboard-container">
+        <h2>Central de Comando - <span id="user-role-display" style="color: white;"></span></h2>
+        <p style="text-align: center; color: var(--text-muted); margin-bottom: 30px;">
+            Sessão ativa: <strong id="logged-user" style="color: var(--primary);"></strong>
+        </p>
 
-        <div class="dashboard-grid">
-            
-            <!-- Comandos (Visível para ambos) -->
-            <div class="panel-section">
-                <h3>Comandos Rápidos</h3>
-                <button class="command-btn" onclick="executarComando('reviver')">Reviver Área (/reviverall)</button>
-                <button class="command-btn" onclick="executarComando('limpar')">Limpar Veículos (/dvall)</button>
-                <button class="command-btn" onclick="executarComando('anuncio')">Anúncio Global (/anuncio)</button>
-                <button class="command-btn" onclick="executarComando('clima')">Mudar Clima (/clima)</button>
+        <div class="grid">
+            <!-- Comandos Básicos (Visível para todos) -->
+            <div class="card">
+                <h3>Ações Rápidas</h3>
+                <button class="btn-small" onclick="executarComando('/reviverall')">Reviver Todos</button>
+                <button class="btn-small" onclick="executarComando('/dvall')">Limpar Veículos (DV)</button>
+                <button class="btn-small" onclick="executarComando('/anuncio')">Enviar Anúncio</button>
+                <button class="btn-small" onclick="executarComando('/clima')">Mudar Clima</button>
             </div>
 
-            <!-- Área Exclusiva do Dono -->
-            <div class="panel-section hidden" id="owner-section">
-                <h3>Gerenciar Administradores</h3>
-                <p style="font-size: 12px; color: #aaa;">Somente o Dono pode criar novas contas de Admin.</p>
+            <!-- Área de Criação de Admins (Só para o Dono) -->
+            <div class="card hidden" id="owner-section">
+                <h3>Banco de Dados: Admins</h3>
                 
-                <div class="form-group">
-                    <label>Novo Usuário Admin</label>
-                    <input type="text" id="new-admin-user" placeholder="Nome do Admin">
+                <div class="input-group" style="margin-top: 15px;">
+                    <input type="text" id="new-admin-user" placeholder="Novo Login Admin">
                 </div>
-                <div class="form-group">
-                    <label>Senha do Admin</label>
-                    <input type="password" id="new-admin-pass" placeholder="Senha Forte">
+                <div class="input-group">
+                    <input type="password" id="new-admin-pass" placeholder="Nova Senha Forte">
                 </div>
-                <button onclick="criarAdmin()" style="background-color: #4caf50;">Criar Conta Admin</button>
-                <div id="admin-msg-box" style="margin-top: 10px; font-size: 13px;"></div>
-            </div>
+                <button onclick="criarAdmin()" style="padding: 12px; font-size: 14px;">Registrar Admin</button>
+                <div id="admin-msg-box" class="msg" style="margin-top: 5px;"></div>
 
+                <!-- Lista de Admins Salvos -->
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Usuário</th>
+                                <th>Hash (Criptografia)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admins-list">
+                            <!-- Preenchido via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
-        <button class="logout-btn" onclick="sair()">Desconectar</button>
+        <button class="btn-danger" onclick="sair()">Encerrar Sessão</button>
     </div>
 
     <script>
-        // Função para Criptografar Senhas (SHA-256)
-        async function sha256(mensagem) {
-            const msgBuffer = new TextEncoder().encode(mensagem);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+        // --- SISTEMA DE CRIPTOGRAFIA PESADA ---
+        const SALT = "GTA_RP_SALT_SECRET_2023_SECURITY"; // Dificulta quebra de senhas
+
+        async function hashPassword(senha) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(senha + SALT);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
             const hashArray = Array.from(new Uint8Array(hashBuffer));
-            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-            return hashHex;
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
         }
 
-        // Credenciais Fixas do Dono (HillZera)
+        // --- CREDENCIAIS DO DONO ---
         const DONO_USER = "HillZera";
         const DONO_PASS_RAW = "01051994Senna@Lp12";
         let DONO_HASH = "";
 
-        // Inicializa o sistema gerando o hash do dono e carregando admins
-        async function init() {
-            DONO_HASH = await sha256(DONO_PASS_RAW);
-            
-            // Inicializa a base de admins no LocalStorage se não existir
-            if (!localStorage.getItem('rp_admins')) {
-                localStorage.setItem('rp_admins', JSON.stringify({}));
+        async function inicializarSistema() {
+            DONO_HASH = await hashPassword(DONO_PASS_RAW);
+            if (!localStorage.getItem('banco_admins_rp')) {
+                localStorage.setItem('banco_admins_rp', JSON.stringify({}));
             }
+            atualizarTabelaAdmins();
         }
-        init();
+        inicializarSistema();
 
-        // Função de Login
+        // --- FUNÇÃO DE LOGIN COM SIMULAÇÃO DE BANCO DE DADOS ---
         async function realizarLogin() {
+            const btn = document.getElementById('login-btn');
+            const msgBox = document.getElementById('msg-box');
             const tipo = document.getElementById('login-type').value;
             const user = document.getElementById('username').value.trim();
             const pass = document.getElementById('password').value;
-            const msgBox = document.getElementById('msg-box');
 
             if (!user || !pass) {
-                mostrarMensagem(msgBox, "Preencha todos os campos!", "error");
+                mostrarMensagem(msgBox, "Preencha todos os campos corretamente.", "error");
                 return;
             }
 
-            const hashPass = await sha256(pass);
+            // Efeito visual de carregamento "pesado"
+            btn.classList.add('loading');
+            msgBox.innerText = "";
 
-            if (tipo === 'dono') {
-                if (user === DONO_USER && hashPass === DONO_HASH) {
-                    abrirDashboard('Dono', user);
-                } else {
-                    mostrarMensagem(msgBox, "Credenciais de Dono incorretas!", "error");
+            // Simula o tempo de requisição a um banco de dados
+            setTimeout(async () => {
+                const passCriptografada = await hashPassword(pass);
+
+                if (tipo === 'dono') {
+                    if (user === DONO_USER && passCriptografada === DONO_HASH) {
+                        abrirDashboard('Dono', user);
+                    } else {
+                        mostrarMensagem(msgBox, "Acesso Negado: Credenciais inválidas.", "error");
+                    }
+                } else if (tipo === 'admin') {
+                    const admins = JSON.parse(localStorage.getItem('banco_admins_rp'));
+                    if (admins[user] && admins[user] === passCriptografada) {
+                        abrirDashboard('Administrador', user);
+                    } else {
+                        mostrarMensagem(msgBox, "Acesso Negado: Admin não encontrado ou senha errada.", "error");
+                    }
                 }
-            } else if (tipo === 'admin') {
-                const admins = JSON.parse(localStorage.getItem('rp_admins'));
-                if (admins[user] && admins[user] === hashPass) {
-                    abrirDashboard('Administrador', user);
-                } else {
-                    mostrarMensagem(msgBox, "Usuário ou senha de Admin incorretos!", "error");
-                }
-            }
+                
+                btn.classList.remove('loading');
+            }, 800); // 800ms de delay simulado
         }
 
-        // Abre o painel após o login
-        function abrirDashboard(role, username) {
+        function abrirDashboard(cargo, usuario) {
             document.getElementById('login-container').classList.add('hidden');
             document.getElementById('dashboard-container').classList.remove('hidden');
-            
-            document.getElementById('user-role-display').innerText = role;
-            document.getElementById('logged-user').innerText = username;
+            document.getElementById('user-role-display').innerText = cargo;
+            document.getElementById('logged-user').innerText = usuario;
 
-            // Exibe a área de criar admins apenas se for o Dono
-            const ownerSection = document.getElementById('owner-section');
-            if (role === 'Dono') {
-                ownerSection.classList.remove('hidden');
+            if (cargo === 'Dono') {
+                document.getElementById('owner-section').classList.remove('hidden');
+                atualizarTabelaAdmins();
             } else {
-                ownerSection.classList.add('hidden');
+                document.getElementById('owner-section').classList.add('hidden');
             }
         }
 
-        // Função para o Dono criar novos admins
+        // --- FUNÇÃO DE CRIAR ADMINS ---
         async function criarAdmin() {
-            const newUser = document.getElementById('new-admin-user').value.trim();
-            const newPass = document.getElementById('new-admin-pass').value;
+            const novoUser = document.getElementById('new-admin-user').value.trim();
+            const novaPass = document.getElementById('new-admin-pass').value;
             const msgBox = document.getElementById('admin-msg-box');
 
-            if (!newUser || !newPass) {
+            if (!novoUser || !novaPass) {
                 mostrarMensagem(msgBox, "Preencha usuário e senha!", "error");
                 return;
             }
 
-            if (newUser === DONO_USER) {
-                mostrarMensagem(msgBox, "Você não pode usar o nome do Dono!", "error");
+            if (novoUser.toLowerCase() === DONO_USER.toLowerCase()) {
+                mostrarMensagem(msgBox, "Nome reservado ao sistema.", "error");
                 return;
             }
 
-            const admins = JSON.parse(localStorage.getItem('rp_admins'));
-            
-            if (admins[newUser]) {
-                mostrarMensagem(msgBox, "Este administrador já existe!", "error");
+            const admins = JSON.parse(localStorage.getItem('banco_admins_rp'));
+            if (admins[novoUser]) {
+                mostrarMensagem(msgBox, "Este login já existe no banco.", "error");
                 return;
             }
 
-            // Criptografa a senha do admin antes de salvar
-            const hashedPass = await sha256(newPass);
-            admins[newUser] = hashedPass;
-            
-            localStorage.setItem('rp_admins', JSON.stringify(admins));
-            
-            mostrarMensagem(msgBox, `Admin ${newUser} criado com sucesso!`, "success");
-            
-            // Limpa os campos
+            // Salva criptografado
+            const hash = await hashPassword(novaPass);
+            admins[novoUser] = hash;
+            localStorage.setItem('banco_admins_rp', JSON.stringify(admins));
+
+            mostrarMensagem(msgBox, "Administrador registrado com sucesso!", "success");
             document.getElementById('new-admin-user').value = "";
             document.getElementById('new-admin-pass').value = "";
+            
+            atualizarTabelaAdmins();
         }
 
-        // Simulação de Comandos
+        // --- ATUALIZA A TABELA VISUAL ---
+        function atualizarTabelaAdmins() {
+            const tbody = document.getElementById('admins-list');
+            const admins = JSON.parse(localStorage.getItem('banco_admins_rp')) || {};
+            
+            tbody.innerHTML = "";
+            
+            const nomes = Object.keys(admins);
+            if (nomes.length === 0) {
+                tbody.innerHTML = "<tr><td colspan='2' style='text-align:center;'>Nenhum admin registrado ainda.</td></tr>";
+                return;
+            }
+
+            nomes.forEach(nome => {
+                const tr = document.createElement('tr');
+                const hashReduzido = admins[nome].substring(0, 15) + "..."; // Mostra só um pedaço do hash
+                
+                tr.innerHTML = `
+                    <td><strong>${nome}</strong></td>
+                    <td class="hash-text">${hashReduzido}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
         function executarComando(cmd) {
-            alert(`Comando [ ${cmd.toUpperCase()} ] enviado para o servidor!`);
-            // Aqui entraria a integração real com a API do seu servidor FiveM (usando fetch/axios)
+            alert(`[SISTEMA] Comando ${cmd} executado no servidor.`);
         }
 
-        // Função de Logout
         function sair() {
             document.getElementById('dashboard-container').classList.add('hidden');
             document.getElementById('login-container').classList.remove('hidden');
-            
-            // Limpa os campos de login
             document.getElementById('username').value = "";
             document.getElementById('password').value = "";
             document.getElementById('msg-box').innerText = "";
         }
 
-        // Função Auxiliar para Mensagens
         function mostrarMensagem(elemento, texto, classe) {
             elemento.innerText = texto;
-            elemento.className = classe;
-            setTimeout(() => { elemento.innerText = ""; }, 3000);
+            elemento.className = "msg " + classe;
+            setTimeout(() => { elemento.innerText = ""; }, 3500);
         }
     </script>
 </body>
