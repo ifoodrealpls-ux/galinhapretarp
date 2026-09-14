@@ -6,7 +6,6 @@
 <meta name="theme-color" content="#087cff">
 <meta name="description" content="Painel administrativo GTA RP">
 <title>GTA RP Admin Hub</title>
-
 <style>
 :root{
     --bg:#07101d;
@@ -26,17 +25,14 @@
     --shadow:0 20px 60px rgba(0,0,0,.35);
     --radius:16px;
 }
-
 *{
     box-sizing:border-box;
     margin:0;
     padding:0;
 }
-
 html{
     scroll-behavior:smooth;
 }
-
 body{
     min-height:100vh;
     background:
@@ -47,26 +43,21 @@ body{
     font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;
     overflow-x:hidden;
 }
-
 button,
 input,
 select,
 textarea{
     font:inherit;
 }
-
 button{
     cursor:pointer;
 }
-
 .hidden{
     display:none!important;
 }
-
 /* =========================================================
    LOGIN
 ========================================================= */
-
 #loginScreen{
     min-height:100vh;
     display:flex;
@@ -76,7 +67,6 @@ button{
     position:relative;
     overflow:hidden;
 }
-
 .login-background{
     position:absolute;
     inset:0;
@@ -84,7 +74,6 @@ button{
         linear-gradient(135deg,rgba(7,16,29,.96),rgba(7,16,29,.82)),
         radial-gradient(circle at 50% 50%,#087cff22,transparent 50%);
 }
-
 .login-grid{
     position:absolute;
     inset:0;
@@ -96,7 +85,6 @@ button{
     transform:perspective(500px) rotateX(55deg) scale(1.8);
     transform-origin:center bottom;
 }
-
 .login-card{
     width:min(440px,100%);
     position:relative;
@@ -108,13 +96,11 @@ button{
     box-shadow:var(--shadow);
     backdrop-filter:blur(20px);
 }
-
 .brand{
     display:flex;
     align-items:center;
     gap:14px;
 }
-
 .brand-icon{
     width:52px;
     height:52px;
@@ -127,34 +113,28 @@ button{
     font-size:24px;
     font-weight:900;
 }
-
 .brand h1{
     font-size:22px;
 }
-
 .brand span{
     display:block;
     color:var(--muted);
     font-size:12px;
     margin-top:3px;
 }
-
 .login-title{
     margin-top:38px;
     margin-bottom:8px;
     font-size:28px;
 }
-
 .login-subtitle{
     color:var(--muted);
     line-height:1.5;
     margin-bottom:28px;
 }
-
 .form-group{
     margin-bottom:18px;
 }
-
 .form-label{
     display:block;
     color:#a9bad0;
@@ -162,11 +142,9 @@ button{
     font-weight:600;
     margin-bottom:8px;
 }
-
 .input-wrap{
     position:relative;
 }
-
 .input-icon{
     position:absolute;
     left:15px;
@@ -174,7 +152,6 @@ button{
     transform:translateY(-50%);
     color:#66809c;
 }
-
 .input{
     width:100%;
     border:1px solid var(--border);
@@ -185,12 +162,10 @@ button{
     outline:none;
     transition:.2s;
 }
-
 .input:focus{
     border-color:var(--blue);
     box-shadow:0 0 0 3px rgba(8,124,255,.12);
 }
-
 .login-button{
     width:100%;
     border:0;
@@ -202,19 +177,16 @@ button{
     box-shadow:0 12px 25px rgba(8,124,255,.25);
     transition:.2s;
 }
-
 .login-button:hover{
     transform:translateY(-1px);
     box-shadow:0 16px 30px rgba(8,124,255,.35);
 }
-
 .login-message{
     min-height:20px;
     margin-top:14px;
     color:var(--red);
     font-size:13px;
 }
-
 .security-note{
     margin-top:24px;
     padding:12px;
@@ -225,15 +197,12 @@ button{
     font-size:11px;
     line-height:1.5;
 }
-
 /* =========================================================
    APP
 ========================================================= */
-
 #app{
     min-height:100vh;
 }
-
 .sidebar{
     width:260px;
     position:fixed;
@@ -247,32 +216,26 @@ button{
     flex-direction:column;
     transition:.25s;
 }
-
 .sidebar-brand{
     padding:25px 22px;
     border-bottom:1px solid var(--border);
 }
-
 .sidebar-brand .brand-icon{
     width:43px;
     height:43px;
     font-size:19px;
 }
-
 .sidebar-brand h1{
     font-size:17px;
 }
-
 .sidebar-brand span{
     font-size:10px;
 }
-
 .nav{
     padding:18px 12px;
     flex:1;
     overflow-y:auto;
 }
-
 .nav-section{
     color:#526981;
     font-size:10px;
@@ -281,7 +244,6 @@ button{
     font-weight:800;
     padding:12px 12px 8px;
 }
-
 .nav-item{
     width:100%;
     display:flex;
@@ -296,36 +258,30 @@ button{
     text-align:left;
     transition:.2s;
 }
-
 .nav-item:hover{
     color:white;
     background:rgba(255,255,255,.045);
 }
-
 .nav-item.active{
     color:white;
     background:linear-gradient(90deg,rgba(8,124,255,.2),rgba(8,124,255,.05));
     border-left:3px solid var(--blue);
 }
-
 .nav-icon{
     width:22px;
     text-align:center;
     font-size:15px;
 }
-
 .sidebar-bottom{
     padding:14px;
     border-top:1px solid var(--border);
 }
-
 .user-mini{
     display:flex;
     align-items:center;
     gap:10px;
     padding:10px;
 }
-
 .avatar{
     width:38px;
     height:38px;
@@ -336,28 +292,23 @@ button{
     background:linear-gradient(135deg,#087cff,#18bfff);
     font-weight:900;
 }
-
 .user-mini strong{
     display:block;
     font-size:13px;
 }
-
 .user-mini span{
     display:block;
     color:var(--muted);
     font-size:10px;
     margin-top:2px;
 }
-
 /* =========================================================
    MAIN
 ========================================================= */
-
 .main{
     margin-left:260px;
     min-height:100vh;
 }
-
 .topbar{
     height:76px;
     display:flex;
@@ -371,13 +322,11 @@ button{
     top:0;
     z-index:50;
 }
-
 .topbar-left{
     display:flex;
     align-items:center;
     gap:15px;
 }
-
 .menu-mobile{
     display:none;
     border:0;
@@ -385,12 +334,10 @@ button{
     color:white;
     font-size:21px;
 }
-
 .page-title{
     font-size:18px;
     font-weight:800;
 }
-
 .server-status{
     display:flex;
     align-items:center;
@@ -398,7 +345,6 @@ button{
     color:#79a0bf;
     font-size:12px;
 }
-
 .status-dot{
     width:8px;
     height:8px;
@@ -406,13 +352,11 @@ button{
     background:var(--green);
     box-shadow:0 0 10px var(--green);
 }
-
 .top-actions{
     display:flex;
     align-items:center;
     gap:10px;
 }
-
 .icon-button{
     width:38px;
     height:38px;
@@ -424,50 +368,41 @@ button{
     color:#9bb0c6;
     border-radius:10px;
 }
-
 .icon-button:hover{
     color:white;
     border-color:#245178;
 }
-
 .content{
     padding:30px;
     max-width:1800px;
     margin:auto;
 }
-
 /* =========================================================
    DASHBOARD
 ========================================================= */
-
 .welcome{
     display:flex;
     align-items:flex-end;
     justify-content:space-between;
     margin-bottom:25px;
 }
-
 .welcome h2{
     font-size:27px;
 }
-
 .welcome p{
     color:var(--muted);
     margin-top:6px;
     font-size:13px;
 }
-
 .date-box{
     color:#7790a8;
     font-size:12px;
 }
-
 .stats-grid{
     display:grid;
     grid-template-columns:repeat(4,1fr);
     gap:16px;
 }
-
 .stat-card{
     padding:21px;
     border:1px solid var(--border);
@@ -475,13 +410,11 @@ button{
     border-radius:var(--radius);
     box-shadow:0 8px 30px rgba(0,0,0,.12);
 }
-
 .stat-top{
     display:flex;
     justify-content:space-between;
     align-items:center;
 }
-
 .stat-icon{
     width:42px;
     height:42px;
@@ -492,7 +425,6 @@ button{
     background:rgba(8,124,255,.11);
     color:#43a9ff;
 }
-
 .stat-change{
     font-size:11px;
     color:var(--green);
@@ -500,33 +432,28 @@ button{
     padding:5px 7px;
     border-radius:7px;
 }
-
 .stat-number{
     font-size:29px;
     font-weight:900;
     margin-top:20px;
 }
-
 .stat-label{
     color:#70859d;
     font-size:12px;
     margin-top:5px;
 }
-
 .dashboard-grid{
     display:grid;
     grid-template-columns:1.4fr .8fr;
     gap:18px;
     margin-top:18px;
 }
-
 .card{
     background:linear-gradient(145deg,#0d1c30,#0a1727);
     border:1px solid var(--border);
     border-radius:var(--radius);
     overflow:hidden;
 }
-
 .card-header{
     padding:18px 20px;
     display:flex;
@@ -534,20 +461,16 @@ button{
     justify-content:space-between;
     border-bottom:1px solid var(--border);
 }
-
 .card-header h3{
     font-size:14px;
 }
-
 .card-header span{
     color:#617890;
     font-size:11px;
 }
-
 .card-body{
     padding:20px;
 }
-
 .activity{
     display:flex;
     align-items:flex-start;
@@ -555,11 +478,9 @@ button{
     padding:13px 0;
     border-bottom:1px solid rgba(255,255,255,.04);
 }
-
 .activity:last-child{
     border-bottom:0;
 }
-
 .activity-icon{
     width:32px;
     height:32px;
@@ -572,30 +493,25 @@ button{
     color:#5bb4ff;
     font-size:12px;
 }
-
 .activity strong{
     display:block;
     font-size:12px;
 }
-
 .activity p{
     color:#71869c;
     font-size:11px;
     margin-top:3px;
 }
-
 .activity time{
     margin-left:auto;
     color:#4f657d;
     font-size:10px;
 }
-
 .quick-grid{
     display:grid;
     grid-template-columns:repeat(2,1fr);
     gap:10px;
 }
-
 .quick-button{
     border:1px solid var(--border);
     background:#0a192b;
@@ -604,53 +520,43 @@ button{
     padding:14px 10px;
     transition:.2s;
 }
-
 .quick-button:hover{
     border-color:#176ab0;
     background:#0c2137;
     color:white;
 }
-
 .quick-button .q-icon{
     font-size:19px;
     display:block;
     margin-bottom:8px;
 }
-
 .quick-button span{
     font-size:11px;
     font-weight:700;
 }
-
 /* =========================================================
    PAGES
 ========================================================= */
-
 .page{
     display:none;
 }
-
 .page.active{
     display:block;
 }
-
 .section-heading{
     display:flex;
     align-items:flex-end;
     justify-content:space-between;
     margin-bottom:20px;
 }
-
 .section-heading h2{
     font-size:23px;
 }
-
 .section-heading p{
     color:var(--muted);
     font-size:12px;
     margin-top:5px;
 }
-
 .btn{
     border:0;
     border-radius:10px;
@@ -660,45 +566,37 @@ button{
     font-weight:800;
     transition:.2s;
 }
-
 .btn-primary{
     background:linear-gradient(135deg,var(--blue),#0066da);
 }
-
 .btn-primary:hover{
     transform:translateY(-1px);
 }
-
 .btn-secondary{
     background:#12263d;
     border:1px solid var(--border);
 }
-
 .btn-danger{
     background:rgba(255,77,103,.1);
     color:#ff7184;
     border:1px solid rgba(255,77,103,.15);
 }
-
 .btn-success{
     background:rgba(32,216,137,.1);
     color:#4ee8a0;
     border:1px solid rgba(32,216,137,.15);
 }
-
 .toolbar{
     display:flex;
     align-items:center;
     gap:10px;
     margin-bottom:16px;
 }
-
 .search{
     flex:1;
     max-width:350px;
     position:relative;
 }
-
 .search input{
     width:100%;
     background:#0b192a;
@@ -708,7 +606,6 @@ button{
     color:white;
     outline:none;
 }
-
 .search span{
     position:absolute;
     left:13px;
@@ -716,16 +613,13 @@ button{
     transform:translateY(-50%);
     color:#5b7188;
 }
-
 .table-wrap{
     overflow-x:auto;
 }
-
 table{
     width:100%;
     border-collapse:collapse;
 }
-
 th{
     text-align:left;
     color:#5d748c;
@@ -735,24 +629,20 @@ th{
     padding:13px 15px;
     border-bottom:1px solid var(--border);
 }
-
 td{
     padding:14px 15px;
     border-bottom:1px solid rgba(255,255,255,.04);
     color:#a7b8ca;
     font-size:12px;
 }
-
 tr:hover td{
     background:rgba(255,255,255,.015);
 }
-
 .player{
     display:flex;
     align-items:center;
     gap:10px;
 }
-
 .player-avatar{
     width:32px;
     height:32px;
@@ -765,16 +655,13 @@ tr:hover td{
     font-size:11px;
     font-weight:800;
 }
-
 .player strong{
     color:white;
     display:block;
 }
-
 .player small{
     color:#526a82;
 }
-
 .badge{
     display:inline-flex;
     padding:5px 8px;
@@ -782,32 +669,26 @@ tr:hover td{
     font-size:10px;
     font-weight:800;
 }
-
 .badge-blue{
     color:#63b9ff;
     background:rgba(8,124,255,.1);
 }
-
 .badge-green{
     color:#54e6a0;
     background:rgba(32,216,137,.08);
 }
-
 .badge-red{
     color:#ff7387;
     background:rgba(255,77,103,.08);
 }
-
 .badge-yellow{
     color:#ffd36c;
     background:rgba(255,200,87,.08);
 }
-
 .action-row{
     display:flex;
     gap:6px;
 }
-
 .small-btn{
     width:31px;
     height:31px;
@@ -816,17 +697,14 @@ tr:hover td{
     color:#7891a9;
     border-radius:8px;
 }
-
 /* =========================================================
    COMMANDS
 ========================================================= */
-
 .command-grid{
     display:grid;
     grid-template-columns:repeat(3,1fr);
     gap:15px;
 }
-
 .command-card{
     padding:19px;
     border-radius:15px;
@@ -834,47 +712,39 @@ tr:hover td{
     background:#0d1d31;
     transition:.2s;
 }
-
 .command-card:hover{
     border-color:#14558b;
     transform:translateY(-2px);
 }
-
 .command-header{
     display:flex;
     justify-content:space-between;
     align-items:center;
 }
-
 .command-code{
     color:#58b4ff;
     font-family:monospace;
     font-weight:800;
     font-size:14px;
 }
-
 .command-card p{
     color:#71869d;
     font-size:11px;
     line-height:1.5;
     margin:10px 0 15px;
 }
-
 .command-footer{
     display:flex;
     justify-content:space-between;
     align-items:center;
 }
-
 .command-category{
     color:#4d6780;
     font-size:10px;
 }
-
 /* =========================================================
    MODAL
 ========================================================= */
-
 .modal-overlay{
     position:fixed;
     inset:0;
@@ -886,11 +756,9 @@ tr:hover td{
     z-index:500;
     padding:20px;
 }
-
 .modal-overlay.show{
     display:flex;
 }
-
 .modal{
     width:min(520px,100%);
     background:#0d1d31;
@@ -898,7 +766,6 @@ tr:hover td{
     border-radius:18px;
     box-shadow:var(--shadow);
 }
-
 .modal-header{
     padding:19px 20px;
     display:flex;
@@ -906,22 +773,18 @@ tr:hover td{
     align-items:center;
     border-bottom:1px solid var(--border);
 }
-
 .modal-header h3{
     font-size:15px;
 }
-
 .modal-close{
     background:transparent;
     border:0;
     color:#6e849a;
     font-size:20px;
 }
-
 .modal-body{
     padding:20px;
 }
-
 .modal-footer{
     padding:15px 20px;
     display:flex;
@@ -929,18 +792,15 @@ tr:hover td{
     gap:9px;
     border-top:1px solid var(--border);
 }
-
 /* =========================================================
    COMMAND CONSOLE
 ========================================================= */
-
 .console{
     background:#050c15;
     border:1px solid var(--border);
     border-radius:14px;
     overflow:hidden;
 }
-
 .console-top{
     display:flex;
     align-items:center;
@@ -949,21 +809,18 @@ tr:hover td{
     border-bottom:1px solid var(--border);
     background:#091523;
 }
-
 .console-dot{
     width:8px;
     height:8px;
     border-radius:50%;
     background:#33485d;
 }
-
 .console-title{
     margin-left:5px;
     color:#5e748b;
     font-size:10px;
     font-family:monospace;
 }
-
 .console-body{
     padding:18px;
     height:250px;
@@ -972,26 +829,21 @@ tr:hover td{
     font-size:11px;
     line-height:1.8;
 }
-
 .console-line{
     color:#6f879e;
 }
-
 .console-line span{
     color:#49b4ff;
 }
-
 .console-input{
     display:flex;
     border-top:1px solid var(--border);
 }
-
 .console-input span{
     padding:13px;
     color:#43a9ff;
     font-family:monospace;
 }
-
 .console-input input{
     flex:1;
     border:0;
@@ -1001,21 +853,17 @@ tr:hover td{
     font-family:monospace;
     font-size:12px;
 }
-
 /* =========================================================
    SETTINGS
 ========================================================= */
-
 .settings-grid{
     display:grid;
     grid-template-columns:220px 1fr;
     gap:18px;
 }
-
 .settings-menu{
     padding:8px;
 }
-
 .settings-tab{
     width:100%;
     text-align:left;
@@ -1026,173 +874,169 @@ tr:hover td{
     border-radius:9px;
     font-size:12px;
 }
-
 .settings-tab.active,
 .settings-tab:hover{
     color:white;
     background:#10263e;
 }
-
 .settings-content{
     padding:22px;
 }
-
 .setting{
     padding:17px 0;
     border-bottom:1px solid rgba(255,255,255,.05);
 }
-
+.setting:first-child{
+    padding-top:0;
+}
+.setting:last-child{
+    border-bottom:0;
+}
+.setting-title{
+    font-weight:700;
+    font-size:13px;
+}
+.setting-description{
+    color:#667d95;
+    font-size:11px;
+    margin-top:5px;
+    line-height:1.5;
+}
+.toggle{
+    width:43px;
+    height:23px;
+    border:0;
+    border-radius:20px;
+    background:#263a4e;
+    position:relative;
+}
+.toggle::after{
+    content:"";
+    width:17px;
+    height:17px;
+    position:absolute;
+    top:3px;
+    left:3px;
+    border-radius:50%;
+    background:#8296a9;
+    transition:.2s;
+}
+.toggle.on{
+    background:var(--blue);
+}
+.toggle.on::after{
+    left:23px;
+    background:white;
+}
 /* =========================================================
-   FIREBASE AUTH & INITIALIZATION (ATUALIZADO)
+   TOAST
 ========================================================= */
-window.firebaseAuth = auth;
-window.firebaseDB = db;
-
-onAuthStateChanged(auth, async (user) => {
-    if(!user){
-        return;
+#toastContainer{
+    position:fixed;
+    right:22px;
+    bottom:22px;
+    z-index:1000;
+    display:flex;
+    flex-direction:column;
+    gap:9px;
+}
+.toast{
+    min-width:260px;
+    max-width:360px;
+    padding:13px 15px;
+    background:#102238;
+    border:1px solid #1c3d5b;
+    border-radius:11px;
+    box-shadow:var(--shadow);
+    color:#b9cadb;
+    font-size:12px;
+    animation:toastIn .25s ease;
+}
+.toast strong{
+    display:block;
+    color:white;
+    margin-bottom:3px;
+}
+.toast.success{
+    border-color:rgba(32,216,137,.25);
+}
+.toast.error{
+    border-color:rgba(255,77,103,.25);
+}
+@keyframes toastIn{
+    from{
+        transform:translateY(10px);
+        opacity:0;
     }
-    try{
-        const adminRef = doc(db, "admins", user.uid);
-        const adminSnap = await getDoc(adminRef);
-        
-        // Se o documento não existir no Firestore, faz logout por segurança
-        if(!adminSnap.exists()){
-            await signOut(auth);
-            showLoginError(
-                "Esta conta não possui permissão administrativa no banco de dados."
-            );
-            return;
-        }
-
-        const data = adminSnap.data();
-        
-        // Força a conversão do cargo para letras minúsculas para evitar erros de digitação (ex: "Owner" vs "owner")
-        const userRole = String(data.role || "admin").toLowerCase();
-
-        window.currentAdmin = {
-            uid: user.uid,
-            email: user.email,
-            name: data.name || "Lucas",
-            role: userRole
-        };
-
-        startApplication(window.currentAdmin);
-    }catch(error){
-        console.error("Erro na autenticação:", error);
-        showLoginError(
-            "Não foi possível verificar suas permissões administrativas."
-        );
-    }
-});
-
-function startApplication(admin){
-    document
-        .getElementById("loginScreen")
-        .classList.add("hidden");
-    document
-        .getElementById("app")
-        .classList.remove("hidden");
-
-    const displayName = admin.name || "Administrador";
-    
-    document
-        .getElementById("userName")
-        .textContent = displayName;
-    document
-        .getElementById("welcomeName")
-        .textContent = displayName;
-    document
-        .getElementById("userAvatar")
-        .textContent = displayName.charAt(0).toUpperCase();
-    
-    // Mostra o cargo correto em letras maiúsculas (ex: OWNER)
-    document
-        .getElementById("userRole")
-        .textContent = String(admin.role).toUpperCase();
-
-    // REGRA DE SEGURANÇA: Se não for OWNER, esconde o botão de criar novos administradores
-    const createAdminBtn = document.getElementById("createAdminButton");
-    if(createAdminBtn) {
-        if(admin.role === "owner"){
-            createAdminBtn.classList.remove("hidden");
-        } else {
-            createAdminBtn.classList.add("hidden");
-        }
+    to{
+        transform:translateY(0);
+        opacity:1;
     }
 }
-
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+@media(max-width:1100px){
+    .stats-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+    .dashboard-grid{
+        grid-template-columns:1fr;
+    }
+    .command-grid{
         grid-template-columns:repeat(2,1fr);
     }
 }
-
 @media(max-width:800px){
     .sidebar{
         transform:translateX(-100%);
     }
-
     .sidebar.open{
         transform:translateX(0);
     }
-
     .main{
         margin-left:0;
     }
-
     .menu-mobile{
         display:block;
     }
-
     .content{
         padding:20px;
     }
-
     .topbar{
         padding:0 18px;
     }
-
     .settings-grid{
         grid-template-columns:1fr;
     }
 }
-
 @media(max-width:600px){
     .stats-grid{
         grid-template-columns:1fr;
     }
-
     .command-grid{
         grid-template-columns:1fr;
     }
-
     .welcome{
         display:block;
     }
-
     .date-box{
         margin-top:12px;
     }
-
     .login-card{
         padding:27px;
     }
 }
 </style>
 </head>
-
 <body>
-
 <!-- =========================================================
      LOGIN
 ========================================================= -->
-
 <section id="loginScreen">
-
     <div class="login-background"></div>
     <div class="login-grid"></div>
-
     <div class="login-card">
-
         <div class="brand">
             <div class="brand-icon">G</div>
             <div>
@@ -1200,19 +1044,14 @@ function startApplication(admin){
                 <span>Painel administrativo</span>
             </div>
         </div>
-
         <h2 class="login-title">Acesso restrito</h2>
-
         <p class="login-subtitle">
             Entre com uma conta administrativa autorizada
             para acessar o painel da cidade.
         </p>
-
         <form id="loginForm">
-
             <div class="form-group">
                 <label class="form-label">Usuário / e-mail</label>
-
                 <div class="input-wrap">
                     <span class="input-icon">◉</span>
                     <input
@@ -1225,10 +1064,8 @@ function startApplication(admin){
                     >
                 </div>
             </div>
-
             <div class="form-group">
                 <label class="form-label">Senha</label>
-
                 <div class="input-wrap">
                     <span class="input-icon">◆</span>
                     <input
@@ -1241,160 +1078,111 @@ function startApplication(admin){
                     >
                 </div>
             </div>
-
             <button class="login-button" type="submit">
                 Entrar no painel
             </button>
-
             <div id="loginMessage" class="login-message"></div>
-
         </form>
-
         <div class="security-note">
             🔒 O cadastro de administradores não é público.
             Contas administrativas devem ser criadas exclusivamente
             pelo proprietário da cidade através do sistema seguro
             de autenticação.
         </div>
-
     </div>
 </section>
-
-
 <!-- =========================================================
      APPLICATION
 ========================================================= -->
-
 <div id="app" class="hidden">
-
     <!-- SIDEBAR -->
-
     <aside class="sidebar" id="sidebar">
-
         <div class="sidebar-brand">
-
             <div class="brand">
                 <div class="brand-icon">G</div>
-
                 <div>
                     <h1>GTA RP Admin</h1>
                     <span>Control Center</span>
                 </div>
             </div>
-
         </div>
-
         <nav class="nav">
-
             <div class="nav-section">Principal</div>
-
             <button class="nav-item active" data-page="dashboard">
                 <span class="nav-icon">▦</span>
                 Dashboard
             </button>
-
             <button class="nav-item" data-page="players">
                 <span class="nav-icon">♙</span>
                 Jogadores
             </button>
-
             <button class="nav-item" data-page="commands">
                 <span class="nav-icon">⌘</span>
                 Comandos
             </button>
-
             <button class="nav-item" data-page="logs">
                 <span class="nav-icon">☷</span>
                 Logs
             </button>
-
-
             <div class="nav-section">Administração</div>
-
             <button class="nav-item" data-page="admins">
                 <span class="nav-icon">♟</span>
                 Administradores
             </button>
-
             <button class="nav-item" data-page="whitelist">
                 <span class="nav-icon">✓</span>
                 Whitelist
             </button>
-
             <button class="nav-item" data-page="bans">
                 <span class="nav-icon">⊘</span>
                 Bans
             </button>
-
-
             <div class="nav-section">Sistema</div>
-
             <button class="nav-item" data-page="console">
                 <span class="nav-icon">></span>
                 Console
             </button>
-
             <button class="nav-item" data-page="settings">
                 <span class="nav-icon">⚙</span>
                 Configurações
             </button>
-
         </nav>
-
         <div class="sidebar-bottom">
-
             <div class="user-mini">
-
                 <div class="avatar" id="userAvatar">
                     H
                 </div>
-
                 <div>
                     <strong id="userName">HillZera</strong>
                     <span id="userRole">OWNER</span>
                 </div>
-
             </div>
-
         </div>
-
     </aside>
-
-
     <!-- MAIN -->
-
     <main class="main">
-
         <header class="topbar">
-
             <div class="topbar-left">
-
                 <button class="menu-mobile" id="menuMobile">
                     ☰
                 </button>
-
                 <div>
                     <div class="page-title" id="pageTitle">
                         Dashboard
                     </div>
-
                     <div class="server-status">
                         <span class="status-dot"></span>
                         Sistema operacional
                     </div>
                 </div>
-
             </div>
-
             <div class="top-actions">
-
                 <button
                     class="icon-button"
                     onclick="showToast('Notificações','Nenhuma nova notificação.')"
                 >
                     ♢
                 </button>
-
                 <button
                     class="icon-button"
                     onclick="logout()"
@@ -1402,192 +1190,120 @@ function startApplication(admin){
                 >
                     ↪
                 </button>
-
             </div>
-
         </header>
-
-
         <div class="content">
-
             <!-- =================================================
                  DASHBOARD
             ================================================== -->
-
             <section class="page active" id="page-dashboard">
-
                 <div class="welcome">
-
                     <div>
                         <h2>Olá, <span id="welcomeName">HillZera</span> 👋</h2>
                         <p>
                             Aqui está o resumo administrativo da cidade.
                         </p>
                     </div>
-
                     <div class="date-box" id="currentDate"></div>
-
                 </div>
-
-
                 <div class="stats-grid">
-
                     <div class="stat-card">
-
                         <div class="stat-top">
                             <div class="stat-icon">♙</div>
                             <div class="stat-change">+12%</div>
                         </div>
-
                         <div class="stat-number" id="playersCount">
                             1.248
                         </div>
-
                         <div class="stat-label">
                             Jogadores registrados
                         </div>
-
                     </div>
-
-
                     <div class="stat-card">
-
                         <div class="stat-top">
                             <div class="stat-icon">●</div>
                             <div class="stat-change">Online</div>
                         </div>
-
                         <div class="stat-number">
                             87
                         </div>
-
                         <div class="stat-label">
                             Jogadores online
                         </div>
-
                     </div>
-
-
                     <div class="stat-card">
-
                         <div class="stat-top">
                             <div class="stat-icon">✓</div>
                             <div class="stat-change">+24</div>
                         </div>
-
                         <div class="stat-number">
                             932
                         </div>
-
                         <div class="stat-label">
                             Whitelist aprovadas
                         </div>
-
                     </div>
-
-
                     <div class="stat-card">
-
                         <div class="stat-top">
                             <div class="stat-icon">⊘</div>
                             <div class="stat-change">Ativo</div>
                         </div>
-
                         <div class="stat-number">
                             63
                         </div>
-
                         <div class="stat-label">
                             Jogadores banidos
                         </div>
-
                     </div>
-
                 </div>
-
-
                 <div class="dashboard-grid">
-
                     <div class="card">
-
                         <div class="card-header">
                             <h3>Atividade recente</h3>
                             <span>Tempo real</span>
                         </div>
-
                         <div class="card-body">
-
                             <div class="activity">
-
                                 <div class="activity-icon">✓</div>
-
                                 <div>
                                     <strong>Whitelist aprovada</strong>
                                     <p>Jogador #10482 foi aprovado.</p>
                                 </div>
-
                                 <time>2 min</time>
-
                             </div>
-
-
                             <div class="activity">
-
                                 <div class="activity-icon">⊘</div>
-
                                 <div>
                                     <strong>Ban aplicado</strong>
                                     <p>Ban administrativo registrado.</p>
                                 </div>
-
                                 <time>7 min</time>
-
                             </div>
-
-
                             <div class="activity">
-
                                 <div class="activity-icon">⌘</div>
-
                                 <div>
                                     <strong>Comando executado</strong>
                                     <p>Comando administrativo utilizado.</p>
                                 </div>
-
                                 <time>12 min</time>
-
                             </div>
-
-
                             <div class="activity">
-
                                 <div class="activity-icon">♟</div>
-
                                 <div>
                                     <strong>Administrador conectado</strong>
                                     <p>Novo acesso ao painel registrado.</p>
                                 </div>
-
                                 <time>18 min</time>
-
                             </div>
-
                         </div>
-
                     </div>
-
-
                     <div class="card">
-
                         <div class="card-header">
                             <h3>Ações rápidas</h3>
                             <span>Admin</span>
                         </div>
-
                         <div class="card-body">
-
                             <div class="quick-grid">
-
                                 <button
                                     class="quick-button"
                                     onclick="openCommand('god')"
@@ -1595,7 +1311,6 @@ function startApplication(admin){
                                     <span class="q-icon">✦</span>
                                     <span>God Mode</span>
                                 </button>
-
                                 <button
                                     class="quick-button"
                                     onclick="openCommand('wl')"
@@ -1603,7 +1318,6 @@ function startApplication(admin){
                                     <span class="q-icon">✓</span>
                                     <span>Whitelist</span>
                                 </button>
-
                                 <button
                                     class="quick-button"
                                     onclick="openCommand('bl')"
@@ -1611,7 +1325,6 @@ function startApplication(admin){
                                     <span class="q-icon">⊘</span>
                                     <span>Ban</span>
                                 </button>
-
                                 <button
                                     class="quick-button"
                                     onclick="openCommand('tp')"
@@ -1619,7 +1332,6 @@ function startApplication(admin){
                                     <span class="q-icon">↗</span>
                                     <span>Teleport</span>
                                 </button>
-
                                 <button
                                     class="quick-button"
                                     onclick="openCommand('revive')"
@@ -1627,7 +1339,6 @@ function startApplication(admin){
                                     <span class="q-icon">+</span>
                                     <span>Reviver</span>
                                 </button>
-
                                 <button
                                     class="quick-button"
                                     onclick="openCommand('kick')"
@@ -1635,47 +1346,30 @@ function startApplication(admin){
                                     <span class="q-icon">×</span>
                                     <span>Kick</span>
                                 </button>
-
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
-
             </section>
-
-
             <!-- =================================================
                  PLAYERS
             ================================================== -->
-
             <section class="page" id="page-players">
-
                 <div class="section-heading">
-
                     <div>
                         <h2>Jogadores</h2>
                         <p>Gerencie jogadores conectados e cadastrados.</p>
                     </div>
-
                     <button
                         class="btn btn-primary"
                         onclick="showToast('Integração','A busca será conectada ao Firestore.')"
                     >
                         + Adicionar
                     </button>
-
                 </div>
-
-
                 <div class="card">
-
                     <div class="card-body">
-
                         <div class="toolbar">
-
                             <div class="search">
                                 <span>⌕</span>
                                 <input
@@ -1685,18 +1379,12 @@ function startApplication(admin){
                                     oninput="filterPlayers()"
                                 >
                             </div>
-
                             <button class="btn btn-secondary">
                                 Filtros
                             </button>
-
                         </div>
-
-
                         <div class="table-wrap">
-
                             <table>
-
                                 <thead>
                                     <tr>
                                         <th>Jogador</th>
@@ -1707,9 +1395,7 @@ function startApplication(admin){
                                         <th>Ações</th>
                                     </tr>
                                 </thead>
-
                                 <tbody id="playersTable">
-
                                     <tr>
                                         <td>
                                             <div class="player">
@@ -1732,8 +1418,6 @@ function startApplication(admin){
                                             </div>
                                         </td>
                                     </tr>
-
-
                                     <tr>
                                         <td>
                                             <div class="player">
@@ -1756,8 +1440,6 @@ function startApplication(admin){
                                             </div>
                                         </td>
                                     </tr>
-
-
                                     <tr>
                                         <td>
                                             <div class="player">
@@ -1779,41 +1461,26 @@ function startApplication(admin){
                                             </div>
                                         </td>
                                     </tr>
-
                                 </tbody>
-
                             </table>
-
                         </div>
-
                     </div>
-
                 </div>
-
             </section>
-
-
             <!-- =================================================
                  COMMANDS
             ================================================== -->
-
             <section class="page" id="page-commands">
-
                 <div class="section-heading">
-
                     <div>
                         <h2>Comandos administrativos</h2>
                         <p>
-                            Central de comandos preparada para integração
+                            Central de comandos preparada para integration
                             com o servidor GTA RP.
                         </p>
                     </div>
-
                 </div>
-
-
                 <div class="command-grid">
-
                     <div class="command-card">
                         <div class="command-header">
                             <span class="command-code">/god</span>
@@ -1825,8 +1492,6 @@ function startApplication(admin){
                             <button class="btn btn-primary" onclick="openCommand('god')">Executar</button>
                         </div>
                     </div>
-
-
                     <div class="command-card">
                         <div class="command-header">
                             <span class="command-code">/wl</span>
@@ -1838,8 +1503,6 @@ function startApplication(admin){
                             <button class="btn btn-primary" onclick="openCommand('wl')">Executar</button>
                         </div>
                     </div>
-
-
                     <div class="command-card">
                         <div class="command-header">
                             <span class="command-code">/bl</span>
@@ -1851,8 +1514,6 @@ function startApplication(admin){
                             <button class="btn btn-primary" onclick="openCommand('bl')">Executar</button>
                         </div>
                     </div>
-
-
                     <div class="command-card">
                         <div class="command-header">
                             <span class="command-code">/kick</span>
@@ -1864,8 +1525,6 @@ function startApplication(admin){
                             <button class="btn btn-primary" onclick="openCommand('kick')">Executar</button>
                         </div>
                     </div>
-
-
                     <div class="command-card">
                         <div class="command-header">
                             <span class="command-code">/tp</span>
@@ -1877,8 +1536,6 @@ function startApplication(admin){
                             <button class="btn btn-primary" onclick="openCommand('tp')">Executar</button>
                         </div>
                     </div>
-
-
                     <div class="command-card">
                         <div class="command-header">
                             <span class="command-code">/bring</span>
@@ -1890,8 +1547,6 @@ function startApplication(admin){
                             <button class="btn btn-primary" onclick="openCommand('bring')">Executar</button>
                         </div>
                     </div>
-
-
                     <div class="command-card">
                         <div class="command-header">
                             <span class="command-code">/revive</span>
@@ -1903,8 +1558,6 @@ function startApplication(admin){
                             <button class="btn btn-primary" onclick="openCommand('revive')">Executar</button>
                         </div>
                     </div>
-
-
                     <div class="command-card">
                         <div class="command-header">
                             <span class="command-code">/freeze</span>
@@ -1916,8 +1569,6 @@ function startApplication(admin){
                             <button class="btn btn-primary" onclick="openCommand('freeze')">Executar</button>
                         </div>
                     </div>
-
-
                     <div class="command-card">
                         <div class="command-header">
                             <span class="command-code">/spectate</span>
@@ -1929,8 +1580,6 @@ function startApplication(admin){
                             <button class="btn btn-primary" onclick="openCommand('spectate')">Executar</button>
                         </div>
                     </div>
-
-
                     <div class="command-card">
                         <div class="command-header">
                             <span class="command-code">/setgroup</span>
@@ -1942,8 +1591,6 @@ function startApplication(admin){
                             <button class="btn btn-primary" onclick="openCommand('setgroup')">Executar</button>
                         </div>
                     </div>
-
-
                     <div class="command-card">
                         <div class="command-header">
                             <span class="command-code">/announce</span>
@@ -1955,8 +1602,6 @@ function startApplication(admin){
                             <button class="btn btn-primary" onclick="openCommand('announce')">Executar</button>
                         </div>
                     </div>
-
-
                     <div class="command-card">
                         <div class="command-header">
                             <span class="command-code">/car</span>
@@ -1968,41 +1613,27 @@ function startApplication(admin){
                             <button class="btn btn-primary" onclick="openCommand('car')">Executar</button>
                         </div>
                     </div>
-
                 </div>
-
             </section>
-
-
             <!-- =================================================
                  LOGS
             ================================================== -->
-
             <section class="page" id="page-logs">
-
                 <div class="section-heading">
-
                     <div>
                         <h2>Logs administrativos</h2>
                         <p>Histórico de ações realizadas pelos administradores.</p>
                     </div>
-
                     <button
                         class="btn btn-secondary"
                         onclick="showToast('Logs','Exportação será conectada ao Firestore.')"
                     >
                         Exportar
                     </button>
-
                 </div>
-
-
                 <div class="card">
-
                     <div class="table-wrap">
-
                         <table>
-
                             <thead>
                                 <tr>
                                     <th>Data</th>
@@ -2012,9 +1643,7 @@ function startApplication(admin){
                                     <th>Resultado</th>
                                 </tr>
                             </thead>
-
                             <tbody>
-
                                 <tr>
                                     <td>14/09/2026 14:21</td>
                                     <td>HillZera</td>
@@ -2022,7 +1651,6 @@ function startApplication(admin){
                                     <td>#10482</td>
                                     <td><span class="badge badge-green">SUCESSO</span></td>
                                 </tr>
-
                                 <tr>
                                     <td>14/09/2026 14:16</td>
                                     <td>HillZera</td>
@@ -2030,34 +1658,24 @@ function startApplication(admin){
                                     <td>#10342</td>
                                     <td><span class="badge badge-green">SUCESSO</span></td>
                                 </tr>
-
                                 <tr>
                                     <td>14/09/2026 14:04</td>
                                     <td>Admin01</td>
+
                                     <td>/bl</td>
                                     <td>#10091</td>
                                     <td><span class="badge badge-green">SUCESSO</span></td>
                                 </tr>
-
                             </tbody>
-
                         </table>
-
                     </div>
-
                 </div>
-
             </section>
-
-
             <!-- =================================================
                  ADMINS
             ================================================== -->
-
             <section class="page" id="page-admins">
-
                 <div class="section-heading">
-
                     <div>
                         <h2>Administradores</h2>
                         <p>
@@ -2065,7 +1683,6 @@ function startApplication(admin){
                             administradores.
                         </p>
                     </div>
-
                     <button
                         id="createAdminButton"
                         class="btn btn-primary"
@@ -2073,16 +1690,10 @@ function startApplication(admin){
                     >
                         + Criar administrador
                     </button>
-
                 </div>
-
-
                 <div class="card">
-
                     <div class="table-wrap">
-
                         <table>
-
                             <thead>
                                 <tr>
                                     <th>Administrador</th>
@@ -2092,9 +1703,7 @@ function startApplication(admin){
                                     <th>Ações</th>
                                 </tr>
                             </thead>
-
                             <tbody>
-
                                 <tr>
                                     <td>
                                         <div class="player">
@@ -2105,25 +1714,19 @@ function startApplication(admin){
                                             </div>
                                         </div>
                                     </td>
-
                                     <td>
                                         <span class="badge badge-red">OWNER</span>
                                     </td>
-
                                     <td>
                                         <span class="badge badge-green">ATIVO</span>
                                     </td>
-
                                     <td>Agora</td>
-
                                     <td>
                                         <span class="badge badge-yellow">
                                             PROTEGIDO
                                         </span>
                                     </td>
                                 </tr>
-
-
                                 <tr>
                                     <td>
                                         <div class="player">
@@ -2134,17 +1737,13 @@ function startApplication(admin){
                                             </div>
                                         </div>
                                     </td>
-
                                     <td>
                                         <span class="badge badge-blue">ADMIN</span>
                                     </td>
-
                                     <td>
                                         <span class="badge badge-green">ATIVO</span>
                                     </td>
-
                                     <td>12 min atrás</td>
-
                                     <td>
                                         <div class="action-row">
                                             <button
@@ -2153,7 +1752,6 @@ function startApplication(admin){
                                             >
                                                 ✎
                                             </button>
-
                                             <button
                                                 class="small-btn"
                                                 onclick="showToast('Administrador','A conta será desativada pelo Firebase.')"
@@ -2163,73 +1761,49 @@ function startApplication(admin){
                                         </div>
                                     </td>
                                 </tr>
-
                             </tbody>
-
                         </table>
-
                     </div>
-
                 </div>
-
             </section>
-
-
             <!-- =================================================
                  WHITELIST
             ================================================== -->
-
             <section class="page" id="page-whitelist">
-
                 <div class="section-heading">
-
                     <div>
                         <h2>Whitelist</h2>
                         <p>Controle das solicitações de entrada na cidade.</p>
                     </div>
-
                 </div>
-
-
                 <div class="stats-grid">
-
                     <div class="stat-card">
                         <div class="stat-icon">◷</div>
                         <div class="stat-number">18</div>
                         <div class="stat-label">Pendentes</div>
                     </div>
-
                     <div class="stat-card">
                         <div class="stat-icon">✓</div>
                         <div class="stat-number">932</div>
                         <div class="stat-label">Aprovadas</div>
                     </div>
-
                     <div class="stat-card">
                         <div class="stat-icon">×</div>
                         <div class="stat-number">127</div>
                         <div class="stat-label">Recusadas</div>
                     </div>
-
                     <div class="stat-card">
                         <div class="stat-icon">%</div>
                         <div class="stat-number">82%</div>
                         <div class="stat-label">Taxa de aprovação</div>
                     </div>
-
                 </div>
-
-
                 <div class="card" style="margin-top:18px;">
-
                     <div class="card-header">
                         <h3>Solicitações recentes</h3>
                     </div>
-
                     <div class="table-wrap">
-
                         <table>
-
                             <thead>
                                 <tr>
                                     <th>Jogador</th>
@@ -2239,9 +1813,7 @@ function startApplication(admin){
                                     <th>Ações</th>
                                 </tr>
                             </thead>
-
                             <tbody>
-
                                 <tr>
                                     <td>NewPlayer01</td>
                                     <td>newplayer#1234</td>
@@ -2260,7 +1832,6 @@ function startApplication(admin){
                                         </div>
                                     </td>
                                 </tr>
-
                                 <tr>
                                     <td>PlayerTest</td>
                                     <td>player#7821</td>
@@ -2279,47 +1850,30 @@ function startApplication(admin){
                                         </div>
                                     </td>
                                 </tr>
-
                             </tbody>
-
                         </table>
-
                     </div>
-
                 </div>
-
             </section>
-
-
             <!-- =================================================
                  BANS
             ================================================== -->
-
             <section class="page" id="page-bans">
-
                 <div class="section-heading">
-
                     <div>
                         <h2>Bans</h2>
                         <p>Histórico de punições administrativas.</p>
                     </div>
-
                     <button
                         class="btn btn-primary"
                         onclick="openCommand('bl')"
                     >
                         + Novo ban
                     </button>
-
                 </div>
-
-
                 <div class="card">
-
                     <div class="table-wrap">
-
                         <table>
-
                             <thead>
                                 <tr>
                                     <th>Jogador</th>
@@ -2330,9 +1884,7 @@ function startApplication(admin){
                                     <th>Status</th>
                                 </tr>
                             </thead>
-
                             <tbody>
-
                                 <tr>
                                     <td>BadPlayer</td>
                                     <td>#10091</td>
@@ -2341,7 +1893,6 @@ function startApplication(admin){
                                     <td>7 dias</td>
                                     <td><span class="badge badge-red">ATIVO</span></td>
                                 </tr>
-
                                 <tr>
                                     <td>ToxicPlayer</td>
                                     <td>#9921</td>
@@ -2350,36 +1901,22 @@ function startApplication(admin){
                                     <td>Permanente</td>
                                     <td><span class="badge badge-red">ATIVO</span></td>
                                 </tr>
-
                             </tbody>
-
                         </table>
-
                     </div>
-
                 </div>
-
             </section>
-
-
             <!-- =================================================
                  CONSOLE
             ================================================== -->
-
             <section class="page" id="page-console">
-
                 <div class="section-heading">
-
                     <div>
                         <h2>Console administrativo</h2>
                         <p>Interface preparada para comunicação com o servidor.</p>
                     </div>
-
                 </div>
-
-
                 <div class="console">
-
                     <div class="console-top">
                         <span class="console-dot"></span>
                         <span class="console-dot"></span>
@@ -2388,337 +1925,223 @@ function startApplication(admin){
                             gta-rp-admin-console
                         </span>
                     </div>
-
                     <div class="console-body" id="consoleOutput">
-
                         <div class="console-line">
                             <span>[14:20:01]</span>
                             GTA RP Admin Hub iniciado.
                         </div>
-
                         <div class="console-line">
                             <span>[14:20:02]</span>
                             Interface carregada.
                         </div>
-
                         <div class="console-line">
                             <span>[14:20:03]</span>
                             Aguardando conexão com servidor...
                         </div>
-
                     </div>
-
                     <div class="console-input">
-
                         <span>&gt;</span>
-
                         <input
                             id="consoleInput"
                             placeholder="Digite um comando..."
                             autocomplete="off"
                             onkeydown="consoleCommand(event)"
                         >
-
                     </div>
-
                 </div>
-
             </section>
-
-
             <!-- =================================================
                  SETTINGS
             ================================================== -->
-
             <section class="page" id="page-settings">
-
                 <div class="section-heading">
-
                     <div>
                         <h2>Configurações</h2>
                         <p>Configurações do painel administrativo.</p>
                     </div>
-
                 </div>
-
-
                 <div class="card">
-
                     <div class="settings-grid">
-
                         <div class="settings-menu">
-
                             <button class="settings-tab active">
                                 Geral
                             </button>
-
                             <button class="settings-tab">
                                 Permissões
                             </button>
-
                             <button class="settings-tab">
                                 Segurança
                             </button>
-
                             <button class="settings-tab">
                                 Servidor
                             </button>
-
                         </div>
-
-
                         <div class="settings-content">
-
                             <div class="setting">
-
                                 <div style="display:flex;justify-content:space-between;align-items:center;">
-
                                     <div>
                                         <div class="setting-title">
                                             Logs administrativos
                                         </div>
-
                                         <div class="setting-description">
                                             Registra ações realizadas pelos administradores.
                                         </div>
                                     </div>
-
                                     <button
                                         class="toggle on"
                                         onclick="this.classList.toggle('on')"
                                     ></button>
-
                                 </div>
-
                             </div>
-
-
                             <div class="setting">
-
                                 <div style="display:flex;justify-content:space-between;align-items:center;">
-
                                     <div>
                                         <div class="setting-title">
                                             Confirmação para bans
                                         </div>
-
                                         <div class="setting-description">
                                             Solicita confirmação antes de aplicar punições.
                                         </div>
                                     </div>
-
                                     <button
                                         class="toggle on"
                                         onclick="this.classList.toggle('on')"
                                     ></button>
-
                                 </div>
-
                             </div>
-
-
                             <div class="setting">
-
                                 <div style="display:flex;justify-content:space-between;align-items:center;">
-
                                     <div>
                                         <div class="setting-title">
                                             Modo manutenção
                                         </div>
-
                                         <div class="setting-description">
                                             Bloqueia ações administrativas durante manutenção.
                                         </div>
                                     </div>
-
                                     <button
                                         class="toggle"
                                         onclick="this.classList.toggle('on')"
                                     ></button>
-
                                 </div>
-
                             </div>
-
-
                             <div class="setting">
-
                                 <div class="setting-title">
                                     Identificação da cidade
                                 </div>
-
                                 <div class="setting-description">
                                     Nome utilizado no painel administrativo.
                                 </div>
-
                                 <input
                                     class="input"
                                     style="margin-top:12px;padding-left:14px;"
                                     value="Cidade GTA RP"
                                 >
-
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
-
             </section>
-
         </div>
-
     </main>
-
 </div>
-
-
 <!-- =========================================================
      COMMAND MODAL
 ========================================================= -->
-
 <div class="modal-overlay" id="commandModal">
-
     <div class="modal">
-
         <div class="modal-header">
-
             <h3 id="commandModalTitle">
                 Executar comando
             </h3>
-
             <button
                 class="modal-close"
                 onclick="closeModal('commandModal')"
             >
                 ×
             </button>
-
         </div>
-
-
         <div class="modal-body">
-
             <div class="form-group">
-
                 <label class="form-label">
                     Comando
                 </label>
-
                 <input
                     id="commandName"
                     class="input"
                     style="padding-left:14px;"
                     readonly
                 >
-
             </div>
-
-
             <div class="form-group">
-
                 <label class="form-label">
                     ID do jogador
                 </label>
-
                 <input
                     id="commandTarget"
                     class="input"
                     style="padding-left:14px;"
                     placeholder="Ex: 10231"
                 >
-
             </div>
-
-
             <div class="form-group">
-
                 <label class="form-label">
                     Motivo / parâmetros
                 </label>
-
                 <textarea
                     id="commandReason"
                     class="input"
                     style="padding-left:14px;min-height:90px;resize:vertical;"
                     placeholder="Informe os parâmetros necessários..."
                 ></textarea>
-
             </div>
-
         </div>
-
-
         <div class="modal-footer">
-
             <button
                 class="btn btn-secondary"
                 onclick="closeModal('commandModal')"
             >
                 Cancelar
             </button>
-
             <button
                 class="btn btn-primary"
                 onclick="executeCommand()"
             >
                 Executar comando
             </button>
-
         </div>
-
     </div>
-
 </div>
-
-
 <!-- =========================================================
      CREATE ADMIN MODAL
 ========================================================= -->
-
 <div class="modal-overlay" id="adminModal">
-
     <div class="modal">
-
         <div class="modal-header">
-
             <h3>Criar administrador</h3>
-
             <button
                 class="modal-close"
                 onclick="closeModal('adminModal')"
             >
                 ×
             </button>
-
         </div>
-
-
         <div class="modal-body">
-
             <div class="form-group">
-
                 <label class="form-label">
                     Nome do administrador
                 </label>
-
                 <input
                     id="newAdminName"
                     class="input"
                     style="padding-left:14px;"
                     placeholder="Nome"
                 >
-
             </div>
-
-
             <div class="form-group">
-
                 <label class="form-label">
                     E-mail
                 </label>
-
                 <input
                     id="newAdminEmail"
                     type="email"
@@ -2726,16 +2149,11 @@ function startApplication(admin){
                     style="padding-left:14px;"
                     placeholder="admin@cidade.com"
                 >
-
             </div>
-
-
             <div class="form-group">
-
                 <label class="form-label">
                     Cargo
                 </label>
-
                 <select
                     id="newAdminRole"
                     class="input"
@@ -2745,63 +2163,44 @@ function startApplication(admin){
                     <option value="moderator">Moderador</option>
                     <option value="support">Suporte</option>
                 </select>
-
             </div>
-
             <div class="security-note">
                 Apenas OWNER poderá criar contas.
                 A criação real deverá ser feita pelo Firebase
                 Authentication através de backend seguro.
             </div>
-
         </div>
-
-
         <div class="modal-footer">
-
             <button
                 class="btn btn-secondary"
                 onclick="closeModal('adminModal')"
             >
                 Cancelar
             </button>
-
             <button
                 class="btn btn-primary"
                 onclick="createAdmin()"
             >
                 Criar administrador
             </button>
-
         </div>
-
     </div>
-
 </div>
-
-
 <!-- =========================================================
      TOAST
 ========================================================= -->
-
 <div id="toastContainer"></div>
-
-
 <!-- =========================================================
      FIREBASE
 ========================================================= -->
-
 <script type="module">
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-
 import {
     getAuth,
     signInWithEmailAndPassword,
     onAuthStateChanged,
     signOut
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-
 import {
     getFirestore,
     doc,
@@ -2811,511 +2210,327 @@ import {
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-
 const firebaseConfig = {
-
     apiKey: "AIzaSyDiUU4FKrxwf8AmEhmkZsQZUSAcGRKaqoA",
-
     authDomain: "cidade-gta-rp.firebaseapp.com",
-
     projectId: "cidade-gta-rp",
-
     storageBucket: "cidade-gta-rp.firebasestorage.app",
-
     messagingSenderId: "11278522689",
-
     appId: "1:11278522689:web:82197bf1ab5907afc8e9c0",
-
     measurementId: "G-BB88SW0E09"
-
 };
 
-
 const app = initializeApp(firebaseConfig);
-
 const auth = getAuth(app);
-
 const db = getFirestore(app);
-
 
 /* =========================================================
    FIREBASE AUTH
 ========================================================= */
-
 window.firebaseAuth = auth;
-
 window.firebaseDB = db;
 
-
 onAuthStateChanged(auth, async (user) => {
-
     if(!user){
-
         return;
-
     }
-
     try{
-
         const adminRef = doc(db,"admins",user.uid);
-
         const adminSnap = await getDoc(adminRef);
+        
+        // Verifica se é o e-mail do dono principal diretamente
+        const isOwnerEmail = user.email.toLowerCase() === "lucaspolicarpodeassis@gmail.com";
 
-
-        if(!adminSnap.exists()){
-
+        if(!adminSnap.exists() && !isOwnerEmail){
             await signOut(auth);
-
             showLoginError(
                 "Esta conta não possui permissão administrativa."
             );
-
             return;
-
         }
 
-
-        const data = adminSnap.data();
-
+        const data = adminSnap.exists() ? adminSnap.data() : {};
+        
+        // Se for você, força o cargo "owner" e o nome para evitar problemas de permissão
         window.currentAdmin = {
-
-            uid:user.uid,
-
-            email:user.email,
-
-            name:data.name || user.email,
-
-            role:data.role || "admin"
-
+            uid: user.uid,
+            email: user.email,
+            name: isOwnerEmail ? "Lucas" : (data.name || user.email),
+            role: isOwnerEmail ? "owner" : String(data.role || "admin").toLowerCase()
         };
 
-
         startApplication(window.currentAdmin);
-
     }catch(error){
-
-        console.error(error);
-
+        console.error("Erro na autenticação:", error);
         showLoginError(
             "Não foi possível verificar suas permissões."
         );
-
     }
-
 });
-
 
 document
 .getElementById("loginForm")
 .addEventListener("submit",async(event)=>{
-
     event.preventDefault();
-
     const email =
         document.getElementById("loginEmail").value.trim();
-
     const password =
         document.getElementById("loginPassword").value;
-
-
     const button =
         event.target.querySelector("button");
-
     button.disabled=true;
-
     button.textContent="Autenticando...";
-
-
     try{
-
         await signInWithEmailAndPassword(
             auth,
             email,
             password
         );
-
         document.getElementById("loginMessage").textContent="";
-
     }catch(error){
-
         console.error(error);
-
         showLoginError(
             "Usuário ou senha inválidos."
         );
-
     }finally{
-
         button.disabled=false;
-
         button.textContent="Entrar no painel";
-
     }
-
 });
 
-
 window.logout = async function(){
-
     await signOut(auth);
-
     document
         .getElementById("app")
         .classList.add("hidden");
-
     document
         .getElementById("loginScreen")
         .classList.remove("hidden");
-
 };
 
-
 window.createAdmin = async function(){
-
     if(!window.currentAdmin){
-
         return;
-
     }
-
-
     if(window.currentAdmin.role !== "owner"){
-
         showToast(
             "Acesso negado",
             "Somente o OWNER pode criar administradores.",
             "error"
         );
-
         return;
-
     }
-
-
     const name =
         document.getElementById("newAdminName").value.trim();
-
     const email =
         document.getElementById("newAdminEmail").value.trim();
-
     const role =
         document.getElementById("newAdminRole").value;
 
-
     if(!name || !email){
-
         showToast(
             "Campos obrigatórios",
             "Preencha nome e e-mail.",
             "error"
         );
-
         return;
-
     }
-
-
     /*
        IMPORTANTE:
-
        NÃO criar usuários Firebase diretamente pelo frontend
        com createUserWithEmailAndPassword(), pois isso poderia
        alterar a sessão do OWNER.
-
        A criação real deve utilizar Firebase Admin SDK em
        Cloud Functions / backend.
-
        Este registro demonstra a estrutura do documento.
     */
-
     try{
-
         await addDoc(
             collection(db,"adminCreationRequests"),
             {
-
                 name:name,
-
                 email:email,
-
                 role:role,
-
                 createdBy:window.currentAdmin.uid,
-
                 createdAt:serverTimestamp(),
-
                 status:"pending"
-
             }
         );
-
-
         closeModal("adminModal");
-
         showToast(
             "Solicitação registrada",
             "A criação da conta deverá ser processada pelo backend seguro.",
             "success"
         );
-
     }catch(error){
-
         console.error(error);
-
         showToast(
             "Erro",
             "Não foi possível registrar a solicitação.",
             "error"
         );
-
     }
-
 };
-
 
 /* =========================================================
    APP START
 ========================================================= */
-
 function startApplication(admin){
-
     document
         .getElementById("loginScreen")
         .classList.add("hidden");
-
     document
         .getElementById("app")
         .classList.remove("hidden");
 
-
     const displayName =
         admin.name || "Administrador";
-
-
     document
         .getElementById("userName")
         .textContent=displayName;
-
-
     document
         .getElementById("welcomeName")
         .textContent=displayName;
-
-
     document
         .getElementById("userAvatar")
         .textContent=
             displayName.charAt(0).toUpperCase();
-
-
     document
         .getElementById("userRole")
         .textContent=
             String(admin.role).toUpperCase();
 
-
-    if(admin.role !== "owner"){
-
-        document
-            .getElementById("createAdminButton")
-            .classList.add("hidden");
-
+    // REGRA DE SEGURANÇA: Se não for OWNER, esconde o botão de criar novos administradores
+    const createAdminBtn = document.getElementById("createAdminButton");
+    if(createAdminBtn) {
+        if(admin.role === "owner"){
+            createAdminBtn.classList.remove("hidden");
+        } else {
+            createAdminBtn.classList.add("hidden");
+        }
     }
-
 }
-
 
 /* =========================================================
    NAVIGATION
 ========================================================= */
-
 document
 .querySelectorAll(".nav-item")
 .forEach(item=>{
-
     item.addEventListener("click",()=>{
-
         const page =
             item.dataset.page;
-
-
         document
             .querySelectorAll(".nav-item")
             .forEach(button =>
                 button.classList.remove("active")
             );
-
-
         item.classList.add("active");
-
-
         document
             .querySelectorAll(".page")
             .forEach(section =>
                 section.classList.remove("active")
             );
-
-
         const target =
             document.getElementById(
                 "page-"+page
             );
-
-
         if(target){
-
             target.classList.add("active");
-
         }
-
-
         const titles={
-
             dashboard:"Dashboard",
-
             players:"Jogadores",
-
             commands:"Comandos",
-
             logs:"Logs",
-
             admins:"Administradores",
-
             whitelist:"Whitelist",
-
             bans:"Bans",
-
             console:"Console",
-
             settings:"Configurações"
-
         };
-
-
         document
             .getElementById("pageTitle")
             .textContent=
                 titles[page] || "Painel";
-
-
         document
             .getElementById("sidebar")
             .classList.remove("open");
-
     });
-
 });
-
 
 document
 .getElementById("menuMobile")
 .addEventListener("click",()=>{
-
     document
         .getElementById("sidebar")
         .classList.toggle("open");
-
 });
-
 
 /* =========================================================
    COMMANDS
 ========================================================= */
-
 window.openCommand=function(command){
-
     const modal =
         document.getElementById("commandModal");
-
-
     document
         .getElementById("commandName")
         .value="/"+command;
-
-
     document
         .getElementById("commandModalTitle")
         .textContent=
             "Executar /"+command;
-
-
     document
         .getElementById("commandTarget")
         .value="";
-
-
     document
         .getElementById("commandReason")
         .value="";
-
-
     modal.classList.add("show");
-
 };
 
-
 window.executeCommand=function(){
-
     const command =
         document
         .getElementById("commandName")
         .value;
-
     const target =
         document
         .getElementById("commandTarget")
         .value;
-
     const reason =
         document
         .getElementById("commandReason")
         .value;
 
-
     if(!target){
-
         showToast(
             "Jogador necessário",
             "Informe o ID do jogador.",
             "error"
         );
-
         return;
-
     }
-
-
     addConsoleLine(
         `Executando ${command} em #${target}`
     );
-
-
     closeModal("commandModal");
-
-
     showToast(
         "Comando preparado",
         `${command} → jogador #${target}`,
         "success"
     );
-
-
     /*
        FUTURA INTEGRAÇÃO:
-
        Aqui deverá existir uma chamada HTTPS
        para o backend do servidor GTA RP.
-
        Exemplo conceitual:
-
        POST /api/admin/command
-
        {
            command: "god",
            target: "10231",
            reason: "..."
        }
-
        O backend deverá validar:
        - Firebase Auth
        - cargo do administrador
@@ -3323,321 +2538,203 @@ window.executeCommand=function(){
        - servidor
        - logs
        - rate limit
-
        NÃO coloque essa validação somente no HTML.
     */
-
 };
 
-
 window.viewPlayer=function(name){
-
     showToast(
         "Jogador",
         `Abrindo perfil de ${name}.`
     );
-
 };
-
 
 /* =========================================================
    WHITELIST
 ========================================================= */
-
 window.approveWL=function(name){
-
     showToast(
         "Whitelist aprovada",
         `${name} foi aprovado.`,
         "success"
     );
-
 };
 
-
 window.rejectWL=function(name){
-
     showToast(
         "Whitelist recusada",
         `${name} foi recusado.`,
         "error"
     );
-
 };
-
 
 /* =========================================================
    PLAYER SEARCH
 ========================================================= */
-
 window.filterPlayers=function(){
-
     const query =
         document
         .getElementById("playerSearch")
         .value
         .toLowerCase();
-
-
     document
         .querySelectorAll("#playersTable tr")
         .forEach(row=>{
-
             row.style.display =
                 row.innerText
                 .toLowerCase()
                 .includes(query)
                 ? ""
                 : "none";
-
         });
-
 };
-
 
 /* =========================================================
    CONSOLE
 ========================================================= */
-
 window.consoleCommand=function(event){
-
     if(event.key !== "Enter"){
-
         return;
-
     }
-
-
     const input =
         document
         .getElementById("consoleInput");
-
-
     const command =
         input.value.trim();
-
-
     if(!command){
-
         return;
-
     }
-
-
     addConsoleLine(command);
-
     input.value="";
 
-
     if(command === "clear"){
-
         document
             .getElementById("consoleOutput")
             .innerHTML="";
-
         return;
-
     }
-
-
     if(command === "help"){
-
         addConsoleLine(
             "Comandos: help, clear, status, players, restart"
         );
-
         return;
-
     }
-
-
     if(command === "status"){
-
         addConsoleLine(
             "Servidor: ONLINE | Ping: 32ms | Players: 87"
         );
-
         return;
-
     }
-
-
     if(command === "players"){
-
         addConsoleLine(
             "Jogadores online: 87"
         );
-
         return;
-
     }
-
-
     addConsoleLine(
         "Comando recebido. Backend ainda não conectado."
     );
-
 };
 
-
 function addConsoleLine(text){
-
     const output =
         document
         .getElementById("consoleOutput");
-
-
     const line =
         document.createElement("div");
-
-
     line.className="console-line";
-
-
     const now =
         new Date()
         .toLocaleTimeString("pt-BR");
-
-
     line.innerHTML=
         `<span>[${now}]</span> ${escapeHtml(text)}`;
-
-
     output.appendChild(line);
-
-
     output.scrollTop=
         output.scrollHeight;
-
 }
-
 
 /* =========================================================
    ADMIN MODAL
 ========================================================= */
-
 window.openCreateAdmin=function(){
-
     if(
         !window.currentAdmin ||
         window.currentAdmin.role !== "owner"
     ){
-
         showToast(
             "Acesso negado",
             "Somente o proprietário possui essa função.",
             "error"
         );
-
         return;
-
     }
-
-
     document
         .getElementById("adminModal")
         .classList.add("show");
-
 };
-
 
 /* =========================================================
    MODALS
 ========================================================= */
-
 window.closeModal=function(id){
-
     document
         .getElementById(id)
         .classList.remove("show");
-
 };
-
 
 document
 .querySelectorAll(".modal-overlay")
 .forEach(overlay=>{
-
     overlay.addEventListener("click",(event)=>{
-
         if(event.target === overlay){
-
             overlay.classList.remove("show");
-
         }
-
     });
-
 });
-
 
 /* =========================================================
    TOAST
 ========================================================= */
-
 window.showToast=function(
     title,
     message,
     type="success"
 ){
-
     const container =
         document
         .getElementById("toastContainer");
-
-
     const toast =
         document.createElement("div");
-
-
     toast.className=
         "toast "+type;
-
-
     toast.innerHTML=
         `<strong>${escapeHtml(title)}</strong>
          ${escapeHtml(message)}`;
-
-
     container.appendChild(toast);
-
-
     setTimeout(()=>{
-
         toast.remove();
-
     },3500);
-
 };
-
 
 /* =========================================================
    UTILITIES
 ========================================================= */
-
 function escapeHtml(value){
-
     return String(value)
         .replaceAll("&","&amp;")
         .replaceAll("<","&lt;")
         .replaceAll(">","&gt;")
         .replaceAll('"',"&quot;")
         .replaceAll("'","&#039;");
-
 }
 
-
 function showLoginError(message){
-
     document
         .getElementById("loginMessage")
         .textContent=message;
-
 }
 
-
 function updateDate(){
-
     const date =
         new Date()
         .toLocaleDateString(
@@ -3649,24 +2746,14 @@ function updateDate(){
                 year:"numeric"
             }
         );
-
-
     document
         .getElementById("currentDate")
         .textContent=date;
-
 }
-
-
 updateDate();
-
-
 </script>
-
-
 <!-- =========================================================
      END
 ========================================================= -->
-
 </body>
 </html>
