@@ -1042,122 +1042,86 @@ tr:hover td{
     border-bottom:1px solid rgba(255,255,255,.05);
 }
 
-.setting:first-child{
-    padding-top:0;
-}
-
-.setting:last-child{
-    border-bottom:0;
-}
-
-.setting-title{
-    font-weight:700;
-    font-size:13px;
-}
-
-.setting-description{
-    color:#667d95;
-    font-size:11px;
-    margin-top:5px;
-    line-height:1.5;
-}
-
-.toggle{
-    width:43px;
-    height:23px;
-    border:0;
-    border-radius:20px;
-    background:#263a4e;
-    position:relative;
-}
-
-.toggle::after{
-    content:"";
-    width:17px;
-    height:17px;
-    position:absolute;
-    top:3px;
-    left:3px;
-    border-radius:50%;
-    background:#8296a9;
-    transition:.2s;
-}
-
-.toggle.on{
-    background:var(--blue);
-}
-
-.toggle.on::after{
-    left:23px;
-    background:white;
-}
-
 /* =========================================================
-   TOAST
+   FIREBASE AUTH & INITIALIZATION (ATUALIZADO)
 ========================================================= */
+window.firebaseAuth = auth;
+window.firebaseDB = db;
 
-#toastContainer{
-    position:fixed;
-    right:22px;
-    bottom:22px;
-    z-index:1000;
-    display:flex;
-    flex-direction:column;
-    gap:9px;
-}
-
-.toast{
-    min-width:260px;
-    max-width:360px;
-    padding:13px 15px;
-    background:#102238;
-    border:1px solid #1c3d5b;
-    border-radius:11px;
-    box-shadow:var(--shadow);
-    color:#b9cadb;
-    font-size:12px;
-    animation:toastIn .25s ease;
-}
-
-.toast strong{
-    display:block;
-    color:white;
-    margin-bottom:3px;
-}
-
-.toast.success{
-    border-color:rgba(32,216,137,.25);
-}
-
-.toast.error{
-    border-color:rgba(255,77,103,.25);
-}
-
-@keyframes toastIn{
-    from{
-        transform:translateY(10px);
-        opacity:0;
+onAuthStateChanged(auth, async (user) => {
+    if(!user){
+        return;
     }
-    to{
-        transform:translateY(0);
-        opacity:1;
+    try{
+        const adminRef = doc(db, "admins", user.uid);
+        const adminSnap = await getDoc(adminRef);
+        
+        // Se o documento não existir no Firestore, faz logout por segurança
+        if(!adminSnap.exists()){
+            await signOut(auth);
+            showLoginError(
+                "Esta conta não possui permissão administrativa no banco de dados."
+            );
+            return;
+        }
+
+        const data = adminSnap.data();
+        
+        // Força a conversão do cargo para letras minúsculas para evitar erros de digitação (ex: "Owner" vs "owner")
+        const userRole = String(data.role || "admin").toLowerCase();
+
+        window.currentAdmin = {
+            uid: user.uid,
+            email: user.email,
+            name: data.name || "Lucas",
+            role: userRole
+        };
+
+        startApplication(window.currentAdmin);
+    }catch(error){
+        console.error("Erro na autenticação:", error);
+        showLoginError(
+            "Não foi possível verificar suas permissões administrativas."
+        );
+    }
+});
+
+function startApplication(admin){
+    document
+        .getElementById("loginScreen")
+        .classList.add("hidden");
+    document
+        .getElementById("app")
+        .classList.remove("hidden");
+
+    const displayName = admin.name || "Administrador";
+    
+    document
+        .getElementById("userName")
+        .textContent = displayName;
+    document
+        .getElementById("welcomeName")
+        .textContent = displayName;
+    document
+        .getElementById("userAvatar")
+        .textContent = displayName.charAt(0).toUpperCase();
+    
+    // Mostra o cargo correto em letras maiúsculas (ex: OWNER)
+    document
+        .getElementById("userRole")
+        .textContent = String(admin.role).toUpperCase();
+
+    // REGRA DE SEGURANÇA: Se não for OWNER, esconde o botão de criar novos administradores
+    const createAdminBtn = document.getElementById("createAdminButton");
+    if(createAdminBtn) {
+        if(admin.role === "owner"){
+            createAdminBtn.classList.remove("hidden");
+        } else {
+            createAdminBtn.classList.add("hidden");
+        }
     }
 }
 
-/* =========================================================
-   RESPONSIVE
-========================================================= */
-
-@media(max-width:1100px){
-    .stats-grid{
-        grid-template-columns:repeat(2,1fr);
-    }
-
-    .dashboard-grid{
-        grid-template-columns:1fr;
-    }
-
-    .command-grid{
         grid-template-columns:repeat(2,1fr);
     }
 }
