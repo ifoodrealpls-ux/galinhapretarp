@@ -1,0 +1,81 @@
+name: Wire Firebase admin creation
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  wire:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Patch admin creation UI
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          path = Path("index.html")
+          text = path.read_text(encoding="utf-8")
+          marker = "ADMIN_FIREBASE_WIRED_V1"
+
+          if marker in text:
+              print("Already patched")
+              raise SystemExit(0)
+
+          text = text.replace(
+              'import {\n    getFirestore,\n    doc,\n    getDoc,\n    collection,\n    addDoc,\n    serverTimestamp\n} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";',
+              'import {\n    getFirestore,\n    doc,\n    getDoc\n} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";\nimport {\n    getFunctions,\n    httpsCallable\n} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-functions.js";'
+          )
+
+          text = text.replace(
+              'const db = getFirestore(app);',
+              'const db = getFirestore(app);\nconst functions = getFunctions(app);\nconst createAdminAccount = httpsCallable(functions, "createAdminAccount");'
+          )
+
+          role_marker = '''            <div class="form-group">\n                <label class="form-label">\n                    Cargo\n                </label>'''
+          password_block = '''            <div class="form-group">\n                <label class="form-label">\n                    Senha inicial\n                </label>\n                <input\n                    id="newAdminPassword"\n                    type="password"\n                    class="input"\n                    style="padding-left:14px;"\n                    minlength="6"\n                    autocomplete="new-password"\n                    placeholder="Mínimo de 6 caracteres"\n                    required\n                >\n            </div>\n'''
+          if role_marker not in text:
+              raise SystemExit("Role field marker not found")
+          text = text.replace(role_marker, password_block + role_marker, 1)
+
+          text = text.replace(
+              '''            <div class="security-note">\n                Apenas OWNER poderá criar contas.\n                A criação real deverá ser feita pelo Firebase\n                Authentication através de backend seguro.\n            </div>''',
+              '''            <div class="security-note">\n                Apenas OWNER poderá criar contas. A senha é enviada\n                somente ao backend seguro do Firebase e não é salva\n                em texto puro no Firestore.\n            </div>''',
+              1
+          )
+
+          pattern = re.compile(
+              r'window\.createAdmin = async function\(\)\{.*?\n\};\n\n/\* =========================================================\n   APP START',
+              re.S
+          )
+
+          replacement = '''window.createAdmin = async function(){\n    if(!window.currentAdmin){\n        return;\n    }\n    if(window.currentAdmin.role !== "owner"){\n        showToast(\n            "Acesso negado",\n            "Somente o OWNER pode criar administradores.",\n            "error"\n        );\n        return;\n    }\n\n    const name = document.getElementById("newAdminName").value.trim();\n    const email = document.getElementById("newAdminEmail").value.trim();\n    const password = document.getElementById("newAdminPassword").value;\n    const role = document.getElementById("newAdminRole").value;\n\n    if(!name || !email || !password){\n        showToast(\n            "Campos obrigatórios",\n            "Preencha nome, e-mail e senha.",\n            "error"\n        );\n        return;\n    }\n\n    if(password.length < 6){\n        showToast(\n            "Senha inválida",\n            "A senha precisa ter pelo menos 6 caracteres.",\n            "error"\n        );\n        return;\n    }\n\n    const button = document.querySelector("#adminModal .modal-footer .btn-primary");\n    if(button){\n        button.disabled = true;\n        button.textContent = "Criando...";\n    }\n\n    try{\n        const result = await createAdminAccount({\n            name,\n            email,\n            password,\n            role\n        });\n\n        closeModal("adminModal");\n        document.getElementById("newAdminName").value = "";\n        document.getElementById("newAdminEmail").value = "";\n        document.getElementById("newAdminPassword").value = "";\n\n        showToast(\n            "Administrador criado",\n            result.data.message || "A conta foi criada no Firebase.",\n            "success"\n        );\n    }catch(error){\n        console.error("Erro ao criar administrador:", error);\n        const message = error?.message || "Não foi possível criar o administrador.";\n        showToast("Erro", message, "error");\n    }finally{\n        if(button){\n            button.disabled = false;\n            button.textContent = "Criar administrador";\n        }\n    }\n};\n\n/* =========================================================\n   APP START'''
+
+          text, count = pattern.subn(replacement, text, count=1)
+          if count != 1:
+              raise SystemExit("createAdmin function marker not found")
+
+          text = text.replace(
+              '<script type="module">',
+              '<script type="module">\n// ADMIN_FIREBASE_WIRED_V1: secure account creation uses Firebase callable backend.',
+              1
+          )
+
+          path.write_text(text, encoding="utf-8")
+          print("Patched index.html")
+
+      - name: Commit patched HTML
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "feat: connect admin creation UI to Firebase backend"
+          git push
