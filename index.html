@@ -2152,6 +2152,21 @@ tr:hover td{
             </div>
             <div class="form-group">
                 <label class="form-label">
+                    Senha inicial
+                </label>
+                <input
+                    id="newAdminPassword"
+                    type="password"
+                    class="input"
+                    style="padding-left:14px;"
+                    minlength="6"
+                    autocomplete="new-password"
+                    placeholder="Mínimo de 6 caracteres"
+                    required
+                >
+            </div>
+            <div class="form-group">
+                <label class="form-label">
                     Cargo
                 </label>
                 <select
@@ -2165,9 +2180,9 @@ tr:hover td{
                 </select>
             </div>
             <div class="security-note">
-                Apenas OWNER poderá criar contas.
-                A criação real deverá ser feita pelo Firebase
-                Authentication através de backend seguro.
+                Apenas OWNER poderá criar contas. A senha é enviada
+                somente ao backend seguro do Firebase e não é salva
+                em texto puro no Firestore.
             </div>
         </div>
         <div class="modal-footer">
@@ -2194,6 +2209,7 @@ tr:hover td{
      FIREBASE
 ========================================================= -->
 <script type="module">
+// ADMIN_FIREBASE_WIRED_V1: secure account creation uses Firebase callable backend.
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import {
     getAuth,
@@ -2204,11 +2220,12 @@ import {
 import {
     getFirestore,
     doc,
-    getDoc,
-    collection,
-    addDoc,
-    serverTimestamp
+    getDoc
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+import {
+    getFunctions,
+    httpsCallable
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-functions.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDiUU4FKrxwf8AmEhmkZsQZUSAcGRKaqoA",
@@ -2223,6 +2240,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const functions = getFunctions(app);
+const createAdminAccount = httpsCallable(functions, "createAdminAccount");
 
 /* =========================================================
    FIREBASE AUTH
@@ -2320,55 +2339,63 @@ window.createAdmin = async function(){
         );
         return;
     }
-    const name =
-        document.getElementById("newAdminName").value.trim();
-    const email =
-        document.getElementById("newAdminEmail").value.trim();
-    const role =
-        document.getElementById("newAdminRole").value;
 
-    if(!name || !email){
+    const name = document.getElementById("newAdminName").value.trim();
+    const email = document.getElementById("newAdminEmail").value.trim();
+    const password = document.getElementById("newAdminPassword").value;
+    const role = document.getElementById("newAdminRole").value;
+
+    if(!name || !email || !password){
         showToast(
             "Campos obrigatórios",
-            "Preencha nome e e-mail.",
+            "Preencha nome, e-mail e senha.",
             "error"
         );
         return;
     }
-    /*
-       IMPORTANTE:
-       NÃO criar usuários Firebase diretamente pelo frontend
-       com createUserWithEmailAndPassword(), pois isso poderia
-       alterar a sessão do OWNER.
-       A criação real deve utilizar Firebase Admin SDK em
-       Cloud Functions / backend.
-       Este registro demonstra a estrutura do documento.
-    */
-    try{
-        await addDoc(
-            collection(db,"adminCreationRequests"),
-            {
-                name:name,
-                email:email,
-                role:role,
-                createdBy:window.currentAdmin.uid,
-                createdAt:serverTimestamp(),
-                status:"pending"
-            }
-        );
-        closeModal("adminModal");
+
+    if(password.length < 6){
         showToast(
-            "Solicitação registrada",
-            "A criação da conta deverá ser processada pelo backend seguro.",
+            "Senha inválida",
+            "A senha precisa ter pelo menos 6 caracteres.",
+            "error"
+        );
+        return;
+    }
+
+    const button = document.querySelector("#adminModal .modal-footer .btn-primary");
+    if(button){
+        button.disabled = true;
+        button.textContent = "Criando...";
+    }
+
+    try{
+        const result = await createAdminAccount({
+            name,
+            email,
+            password,
+            role
+        });
+
+        closeModal("adminModal");
+        document.getElementById("newAdminName").value = "";
+        document.getElementById("newAdminEmail").value = "";
+        document.getElementById("newAdminPassword").value = "";
+
+        showToast(
+            "Administrador criado",
+            result.data.message || "A conta foi criada no Firebase.",
             "success"
         );
     }catch(error){
-        console.error(error);
-        showToast(
-            "Erro",
-            "Não foi possível registrar a solicitação.",
-            "error"
-        );
+        console.error("Erro ao criar administrador:", error);
+        const message = error?.message || "Não foi possível criar o administrador.";
+        showToast("Erro", message, "error");
+    }finally{
+        if(button){
+            button.disabled = false;
+            button.textContent = "Criar administrador";
+        }
     }
 };
 
