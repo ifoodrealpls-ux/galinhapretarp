@@ -16,7 +16,7 @@ exports.createAdminAccount = onCall(async (request) => {
     throw new HttpsError("unauthenticated", "Faça login antes de criar um administrador.");
   }
 
-  const callerEmail = String(caller.token.email || "").toLowerCase();
+  const callerEmail = String(caller.token.email || "").trim().toLowerCase();
   if (callerEmail !== OWNER_EMAIL) {
     throw new HttpsError("permission-denied", "Somente o OWNER pode criar administradores.");
   }
@@ -76,14 +76,31 @@ exports.createAdminAccount = onCall(async (request) => {
   } catch (error) {
     console.error("createAdminAccount failed", error);
 
-    if (error.code === "auth/email-already-exists") {
-      throw new HttpsError("already-exists", "Já existe uma conta com esse e-mail.");
-    }
-
     if (error instanceof HttpsError) {
       throw error;
     }
 
-    throw new HttpsError("internal", "Não foi possível criar o administrador.");
+    switch (error?.code) {
+      case "auth/email-already-exists":
+        throw new HttpsError("already-exists", "Já existe uma conta com esse e-mail.");
+      case "auth/invalid-email":
+        throw new HttpsError("invalid-argument", "O e-mail informado é inválido.");
+      case "auth/invalid-password":
+      case "auth/password-does-not-meet-requirements":
+        throw new HttpsError("invalid-argument", "A senha não atende aos requisitos do Firebase.");
+      case "auth/operation-not-allowed":
+        throw new HttpsError("failed-precondition", "O login por e-mail e senha não está habilitado no Firebase Authentication.");
+      case "auth/quota-exceeded":
+        throw new HttpsError("resource-exhausted", "O limite do Firebase Authentication foi atingido.");
+      case "permission-denied":
+        throw new HttpsError("permission-denied", "O backend não possui permissão para acessar o Firebase necessário para criar o administrador.");
+      case "resource-exhausted":
+        throw new HttpsError("resource-exhausted", "O Firebase atingiu um limite de recursos.");
+      default:
+        throw new HttpsError(
+          "internal",
+          `Não foi possível criar o administrador. Código técnico: ${String(error?.code || "unknown")}`
+        );
+    }
   }
 });
